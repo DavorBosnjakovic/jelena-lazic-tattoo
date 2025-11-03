@@ -1,178 +1,229 @@
-// jela-website/src/lib/utils.ts
+// jela-website/src/lib/resend.ts
 
-import { type ClassValue, clsx } from 'clsx'
-import { twMerge } from 'tailwind-merge'
+import { Resend } from 'resend'
 
-/**
- * Merge Tailwind CSS classes with clsx
- * Useful for conditional className composition
- */
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
+// Lazy initialization - only creates client when actually called
+export function getResendClient() {
+  const resendApiKey = process.env.RESEND_API_KEY
 
-/**
- * Format date to readable string
- */
-export function formatDate(date: Date | string): string {
-  const dateObj = typeof date === 'string' ? new Date(date) : date
-  return dateObj.toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-/**
- * Format phone number for display
- */
-export function formatPhoneNumber(phone: string): string {
-  // Remove all non-numeric characters
-  const cleaned = phone.replace(/\D/g, '')
-  
-  // Format for Serbian numbers (+381 XX XXX XXXX)
-  if (cleaned.startsWith('381') && cleaned.length === 12) {
-    return `+${cleaned.slice(0, 3)} ${cleaned.slice(3, 5)} ${cleaned.slice(5, 8)} ${cleaned.slice(8)}`
+  if (!resendApiKey) {
+    throw new Error('Missing RESEND_API_KEY environment variable')
   }
-  
-  // Return original if format not recognized
-  return phone
+
+  return new Resend(resendApiKey)
 }
 
-/**
- * Validate email format
- */
-export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i
-  return emailRegex.test(email)
+// Email configuration constants
+export const EMAIL_CONFIG = {
+  from: 'Jelena Lazić Tattoo <noreply@jelenalazictattoo.com>', // Update with your verified domain
+  artistEmail: 'jelenalazictattoo@gmail.com',
+  supportEmail: 'jelenalazictattoo@gmail.com',
 }
 
-/**
- * Generate Supabase storage URL
- */
-export function getSupabaseImageUrl(bucket: string, filename: string): string {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  return `${supabaseUrl}/storage/v1/object/public/${bucket}/${filename}`
-}
+// Email templates
+export const emailTemplates = {
+  contactFormSubmission: (data: {
+    fullName: string
+    email: string
+    phone?: string
+    message: string
+  }) => ({
+    subject: `New Contact Form Submission - ${data.fullName}`,
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+            }
+            .header {
+              background-color: #8B0000;
+              color: white;
+              padding: 20px;
+              text-align: center;
+              border-radius: 8px 8px 0 0;
+            }
+            .content {
+              background-color: #f9f9f9;
+              padding: 30px;
+              border: 1px solid #e5e5e5;
+              border-radius: 0 0 8px 8px;
+            }
+            .field {
+              margin-bottom: 20px;
+            }
+            .label {
+              font-weight: bold;
+              color: #8B0000;
+              margin-bottom: 5px;
+            }
+            .value {
+              padding: 10px;
+              background-color: white;
+              border-left: 3px solid #8B0000;
+              border-radius: 4px;
+            }
+            .footer {
+              margin-top: 20px;
+              padding-top: 20px;
+              border-top: 1px solid #e5e5e5;
+              color: #666;
+              font-size: 12px;
+              text-align: center;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="header">
+            <h1 style="margin: 0;">New Contact Form Submission</h1>
+          </div>
+          <div class="content">
+            <div class="field">
+              <div class="label">Name:</div>
+              <div class="value">${data.fullName}</div>
+            </div>
+            
+            <div class="field">
+              <div class="label">Email:</div>
+              <div class="value"><a href="mailto:${data.email}">${data.email}</a></div>
+            </div>
+            
+            ${data.phone ? `
+            <div class="field">
+              <div class="label">Phone:</div>
+              <div class="value">${data.phone}</div>
+            </div>
+            ` : ''}
+            
+            <div class="field">
+              <div class="label">Message:</div>
+              <div class="value">${data.message.replace(/\n/g, '<br>')}</div>
+            </div>
+            
+            <div class="footer">
+              Submitted: ${new Date().toLocaleString('en-US', { 
+                timeZone: 'Europe/Belgrade',
+                dateStyle: 'full',
+                timeStyle: 'short'
+              })}
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
 
-/**
- * Truncate text to specified length
- */
-export function truncateText(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text
-  return text.slice(0, maxLength).trim() + '...'
-}
-
-/**
- * Debounce function for performance optimization
- */
-export function debounce<T extends (...args: any[]) => any>(
-  func: T,
-  wait: number
-): (...args: Parameters<T>) => void {
-  let timeout: NodeJS.Timeout | null = null
-
-  return function executedFunction(...args: Parameters<T>) {
-    const later = () => {
-      timeout = null
-      func(...args)
-    }
-
-    if (timeout) clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-  }
-}
-
-/**
- * Scroll to top of page smoothly
- */
-export function scrollToTop(): void {
-  window.scrollTo({
-    top: 0,
-    behavior: 'smooth',
-  })
-}
-
-/**
- * Scroll to element by ID
- */
-export function scrollToElement(elementId: string): void {
-  const element = document.getElementById(elementId)
-  if (element) {
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-    })
-  }
-}
-
-/**
- * Generate random ID
- */
-export function generateId(): string {
-  return Math.random().toString(36).substring(2, 9)
-}
-
-/**
- * Sleep/delay function
- */
-export function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
-
-/**
- * Check if user is on mobile device
- */
-export function isMobileDevice(): boolean {
-  if (typeof window === 'undefined') return false
-  return window.innerWidth < 768
-}
-
-/**
- * Format file size for display
- */
-export function formatFileSize(bytes: number): string {
-  if (bytes === 0) return '0 Bytes'
-  
-  const k = 1024
-  const sizes = ['Bytes', 'KB', 'MB', 'GB']
-  const i = Math.floor(Math.log(bytes) / Math.log(k))
-  
-  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
-}
-
-/**
- * Copy text to clipboard
- */
-export async function copyToClipboard(text: string): Promise<boolean> {
-  try {
-    await navigator.clipboard.writeText(text)
-    return true
-  } catch (error) {
-    console.error('Failed to copy to clipboard:', error)
-    return false
-  }
-}
-
-/**
- * Get initials from name
- */
-export function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .map((word) => word[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2)
-}
-
-/**
- * Sanitize filename for storage
- */
-export function sanitizeFilename(filename: string): string {
-  return filename
-    .toLowerCase()
-    .replace(/[^a-z0-9.-]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
+  newsletterWelcome: (email: string) => ({
+    subject: 'Welcome to Jelena Lazić Tattoo Updates',
+    html: `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body {
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+              line-height: 1.6;
+              color: #333;
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #fafafa;
+            }
+            .container {
+              background-color: white;
+              border-radius: 12px;
+              overflow: hidden;
+              box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .header {
+              background-color: #8B0000;
+              color: white;
+              padding: 40px 20px;
+              text-align: center;
+            }
+            .content {
+              padding: 40px 30px;
+            }
+            .button {
+              display: inline-block;
+              padding: 12px 30px;
+              background-color: #8B0000;
+              color: white;
+              text-decoration: none;
+              border-radius: 6px;
+              margin: 20px 0;
+            }
+            .footer {
+              padding: 20px 30px;
+              background-color: #f9f9f9;
+              border-top: 1px solid #e5e5e5;
+              color: #666;
+              font-size: 14px;
+              text-align: center;
+            }
+            .social-links {
+              margin: 20px 0;
+            }
+            .social-links a {
+              color: #8B0000;
+              text-decoration: none;
+              margin: 0 10px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <div class="header">
+              <h1 style="margin: 0; font-size: 32px;">Welcome!</h1>
+              <p style="margin: 10px 0 0 0; opacity: 0.9;">Thank you for subscribing</p>
+            </div>
+            
+            <div class="content">
+              <p>Hi there!</p>
+              
+              <p>Thank you for subscribing to Jelena Lazić Tattoo updates. You'll receive occasional emails about:</p>
+              
+              <ul style="line-height: 2;">
+                <li>New tattoo work and portfolio updates</li>
+                <li>Special events and guest spots</li>
+                <li>Studio news and announcements</li>
+                <li>Booking availability</li>
+              </ul>
+              
+              <p>I promise to keep these emails infrequent and valuable—no spam, just art!</p>
+              
+              <div style="text-align: center;">
+                <a href="https://jelenalazictattoo.com/portfolio" class="button">View Portfolio</a>
+              </div>
+              
+              <div class="social-links">
+                <p style="text-align: center; margin-bottom: 10px;"><strong>Follow me on social media:</strong></p>
+                <p style="text-align: center;">
+                  <a href="https://www.instagram.com/jelena_lazic_tattoo">Instagram</a> •
+                  <a href="https://www.facebook.com/jelenalazictattoo">Facebook</a> •
+                  <a href="https://www.tiktok.com/@jelenalazictattoo">TikTok</a>
+                </p>
+              </div>
+            </div>
+            
+            <div class="footer">
+              <p>Jelena Lazić Tattoo<br>
+              Belgrade, Serbia<br>
+              <a href="mailto:jelenalazictattoo@gmail.com" style="color: #8B0000;">jelenalazictattoo@gmail.com</a></p>
+              
+              <p style="margin-top: 20px; font-size: 12px;">
+                You're receiving this email because you subscribed to updates from jelenalazictattoo.com
+              </p>
+            </div>
+          </div>
+        </body>
+      </html>
+    `,
+  }),
 }

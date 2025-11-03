@@ -90,12 +90,11 @@ export default function AboutPage() {
             </div>
 
             <div className="p-8 bg-foreground/5 rounded-xl border border-border">
-              <h3 className="text-2xl font-heading font-bold mb-4 text-accent">Location & Hours</h3>
+              <h3 className="text-2xl font-heading font-bold mb-4 text-accent">Location and Hours</h3>
               <div className="space-y-2 text-foreground/90 font-body">
                 <p>
                   <span className="font-semibold">Studio:</span><br />
-                  Hoću Guze 100<br />
-                  Belgrade, Serbia
+                                    Belgrade, Serbia
                 </p>
                 <p>
                   <span className="font-semibold">Hours:</span><br />

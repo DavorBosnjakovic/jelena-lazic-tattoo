@@ -2,7 +2,7 @@
 
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -14,7 +14,15 @@ export default function PortfolioCarousel() {
   const [loading, setLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
+  const [isTransitioning, setIsTransitioning] = useState(true)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  
+  // Touch/Drag state
+  const [isDragging, setIsDragging] = useState(false)
+  const [startX, setStartX] = useState(0)
+  const [currentX, setCurrentX] = useState(0)
+  const [dragOffset, setDragOffset] = useState(0)
+  const carouselRef = useRef<HTMLDivElement>(null)
 
   const itemsPerView = {
     mobile: 2,
@@ -45,6 +53,7 @@ export default function PortfolioCarousel() {
     fetchImages()
   }, [])
 
+  // Handle responsive items to show
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
@@ -61,13 +70,23 @@ export default function PortfolioCarousel() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
+  // Navigation handlers
+  const handleNext = useCallback(() => {
+    setCurrentIndex((prev) => prev + SLIDES_TO_MOVE)
+  }, [])
+
+  const handlePrev = useCallback(() => {
+    setCurrentIndex((prev) => prev - SLIDES_TO_MOVE)
+  }, [])
+
+  // Auto-rotate carousel
   useEffect(() => {
     if (portfolioImages.length === 0) return
 
     const startInterval = () => {
       intervalRef.current = setInterval(() => {
         if (!isHovered) {
-          setCurrentIndex((prev) => prev + SLIDES_TO_MOVE)
+          handleNext()
         }
       }, 4000)
     }
@@ -79,14 +98,101 @@ export default function PortfolioCarousel() {
         clearInterval(intervalRef.current)
       }
     }
-  }, [isHovered, portfolioImages.length])
+  }, [isHovered, portfolioImages.length, handleNext])
 
-  const handleNext = () => {
-    setCurrentIndex((prev) => prev + SLIDES_TO_MOVE)
+  // Handle infinite loop reset
+  useEffect(() => {
+    if (portfolioImages.length === 0) return
+
+    // When we reach near the end of the first duplicate set, instantly reset
+    if (currentIndex >= portfolioImages.length) {
+      const timer = setTimeout(() => {
+        setIsTransitioning(false)
+        setCurrentIndex(currentIndex % portfolioImages.length)
+        setTimeout(() => setIsTransitioning(true), 50)
+      }, 700)
+
+      return () => clearTimeout(timer)
+    }
+
+    // When we go before the first image, instantly reset to the equivalent position at the end
+    if (currentIndex < 0) {
+      const timer = setTimeout(() => {
+        setIsTransitioning(false)
+        const resetIndex = portfolioImages.length + (currentIndex % portfolioImages.length)
+        setCurrentIndex(resetIndex)
+        setTimeout(() => setIsTransitioning(true), 50)
+      }, 700)
+
+      return () => clearTimeout(timer)
+    }
+  }, [currentIndex, portfolioImages.length])
+
+  // Touch/Mouse drag handlers
+  const handleDragStart = (clientX: number) => {
+    setIsDragging(true)
+    setStartX(clientX)
+    setCurrentX(clientX)
+    setIsTransitioning(false)
   }
 
-  const handlePrev = () => {
-    setCurrentIndex((prev) => prev - SLIDES_TO_MOVE)
+  const handleDragMove = (clientX: number) => {
+    if (!isDragging) return
+    setCurrentX(clientX)
+    const diff = clientX - startX
+    setDragOffset(diff)
+  }
+
+  const handleDragEnd = () => {
+    if (!isDragging) return
+    setIsDragging(false)
+    setIsTransitioning(true)
+
+    const threshold = 50
+    const diff = currentX - startX
+
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        handlePrev()
+      } else {
+        handleNext()
+      }
+    }
+
+    setDragOffset(0)
+  }
+
+  // Mouse events
+  const handleMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault()
+    handleDragStart(e.clientX)
+  }
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    handleDragMove(e.clientX)
+  }
+
+  const handleMouseUp = () => {
+    handleDragEnd()
+  }
+
+  const handleMouseLeave = () => {
+    if (isDragging) {
+      handleDragEnd()
+    }
+  }
+
+  // Touch events
+  const handleTouchStart = (e: React.TouchEvent) => {
+    handleDragStart(e.touches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    handleDragMove(e.touches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    handleDragEnd()
   }
 
   if (loading) {
@@ -111,8 +217,11 @@ export default function PortfolioCarousel() {
     )
   }
 
-  // Infinite duplicates
-  const extendedImages = [...portfolioImages, ...portfolioImages, ...portfolioImages, ...portfolioImages, ...portfolioImages]
+  const extendedImages = [
+    ...portfolioImages,
+    ...portfolioImages,
+    ...portfolioImages,
+  ]
 
   return (
     <section className="py-24 bg-background">
@@ -147,47 +256,68 @@ export default function PortfolioCarousel() {
             <ChevronRight className="w-6 h-6 text-foreground" />
           </button>
 
-          <div className="overflow-hidden">
-            <div
-              className="flex transition-transform duration-700 ease-in-out gap-6"
-              style={{
-                transform: `translateX(calc(-${currentIndex * (100 / itemsToShow + 1.5)}%))`,
-              }}
+          <div className="max-w-7xl mx-auto">
+            <div 
+              className="overflow-hidden cursor-grab active:cursor-grabbing"
+              ref={carouselRef}
+              onMouseDown={handleMouseDown}
+              onMouseMove={handleMouseMove}
+              onMouseUp={handleMouseUp}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
-              {extendedImages.map((src, index) => (
-                <div
-                  key={index}
-                  className="relative aspect-[3/4] rounded-lg overflow-hidden group cursor-pointer flex-shrink-0"
-                  style={{
-                    width: `calc((100% - ${(itemsToShow - 1) * 1.5}rem) / ${itemsToShow})`,
-                  }}
-                >
-                  <Image
-                    src={src}
-                    alt={`Portfolio image ${(index % portfolioImages.length) + 1}`}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                    sizes="(max-width: 768px) 50vw, (max-width: 1199px) 33vw, 25vw"
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
-                </div>
-              ))}
+              <div
+                className={`flex gap-6 ${isTransitioning && !isDragging ? 'transition-transform duration-700 ease-in-out' : ''}`}
+                style={{
+                  transform: `translateX(calc(-${(currentIndex * (100 / itemsToShow)) + (currentIndex * (1.5 / itemsToShow))}% + ${dragOffset}px))`,
+                  userSelect: 'none',
+                }}
+              >
+                {extendedImages.map((src, index) => (
+                  <div
+                    key={`${src}-${index}`}
+                    className="relative aspect-[3/4] rounded-lg overflow-hidden group cursor-pointer flex-shrink-0"
+                    style={{
+                      width: `calc((100% - ${(itemsToShow - 1) * 1.5}rem) / ${itemsToShow})`,
+                      pointerEvents: isDragging ? 'none' : 'auto',
+                    }}
+                    onDragStart={(e) => e.preventDefault()}
+                  >
+                    <Image
+                      src={src}
+                      alt={`Portfolio image ${(index % portfolioImages.length) + 1}`}
+                      fill
+                      className="object-cover transition-transform duration-300 group-hover:scale-105"
+                      sizes="(max-width: 768px) 50vw, (max-width: 1199px) 33vw, 25vw"
+                      draggable={false}
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
 
           <div className="flex justify-center mt-8 space-x-2">
-            {portfolioImages.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentIndex(index)}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  (currentIndex % portfolioImages.length) === index
-                    ? 'bg-accent w-8'
-                    : 'bg-foreground/20 hover:bg-foreground/40 w-2'
-                }`}
-                aria-label={`Go to slide ${index + 1}`}
-              />
-            ))}
+            {portfolioImages.map((_, index) => {
+              const normalizedIndex = ((currentIndex % portfolioImages.length) + portfolioImages.length) % portfolioImages.length
+              const isActive = normalizedIndex === index
+              
+              return (
+                <button
+                  key={index}
+                  onClick={() => setCurrentIndex(index)}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    isActive
+                      ? 'bg-accent w-8'
+                      : 'bg-foreground/20 hover:bg-foreground/40 w-2'
+                  }`}
+                  aria-label={`Go to slide ${index + 1}`}
+                />
+              )
+            })}
           </div>
         </div>
 

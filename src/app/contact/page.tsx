@@ -96,7 +96,7 @@ export default function ContactPage() {
               >
                 <h3 className="text-xl font-heading font-semibold mb-2 text-accent">Studio Location</h3>
                 <p className="text-foreground/90 font-body">
-                  Hoću Guze 100<br />Belgrade, Serbia
+                  <br />Belgrade, Serbia
                 </p>
                 <p className="text-sm text-accent/70 mt-2">Click to view map ↓</p>
               </a>
