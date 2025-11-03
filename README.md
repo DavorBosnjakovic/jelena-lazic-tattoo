@@ -242,4 +242,4 @@ Newsletter signups:
 
 ---
 
-**Built with ❤️ for elegant tattoo artistry**
+**Built with ❤️ for elegant tattoo artistry** 
