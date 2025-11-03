@@ -6,6 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import ImageModal from './ImageModal'
 
 const SLIDES_TO_MOVE = 3
 
@@ -17,8 +18,13 @@ export default function PortfolioCarousel() {
   const [isTransitioning, setIsTransitioning] = useState(true)
   const intervalRef = useRef<NodeJS.Timeout | null>(null)
   
+  // Modal state
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string>('')
+  
   // Touch/Drag state
   const [isDragging, setIsDragging] = useState(false)
+  const [hasDragged, setHasDragged] = useState(false)
   const [startX, setStartX] = useState(0)
   const [currentX, setCurrentX] = useState(0)
   const [dragOffset, setDragOffset] = useState(0)
@@ -131,6 +137,7 @@ export default function PortfolioCarousel() {
   // Touch/Mouse drag handlers
   const handleDragStart = (clientX: number) => {
     setIsDragging(true)
+    setHasDragged(false) // Reset on start
     setStartX(clientX)
     setCurrentX(clientX)
     setIsTransitioning(false)
@@ -141,17 +148,23 @@ export default function PortfolioCarousel() {
     setCurrentX(clientX)
     const diff = clientX - startX
     setDragOffset(diff)
+    
+    // Mark as dragged if moved more than 5px
+    if (Math.abs(diff) > 5) {
+      setHasDragged(true)
+    }
   }
 
   const handleDragEnd = () => {
     if (!isDragging) return
+    
     setIsDragging(false)
     setIsTransitioning(true)
 
     const threshold = 50
     const diff = currentX - startX
 
-    if (Math.abs(diff) > threshold) {
+    if (Math.abs(diff) > threshold && hasDragged) {
       if (diff > 0) {
         handlePrev()
       } else {
@@ -159,7 +172,11 @@ export default function PortfolioCarousel() {
       }
     }
 
-    setDragOffset(0)
+    // Reset drag offset after a brief delay
+    setTimeout(() => {
+      setDragOffset(0)
+      setHasDragged(false)
+    }, 100)
   }
 
   // Mouse events
@@ -193,6 +210,16 @@ export default function PortfolioCarousel() {
 
   const handleTouchEnd = () => {
     handleDragEnd()
+  }
+
+  // Open image in modal
+  const handleImageClick = (imageUrl: string, e: React.MouseEvent) => {
+    e.stopPropagation()
+    
+    if (!hasDragged) {
+      setSelectedImage(imageUrl)
+      setModalOpen(true)
+    }
   }
 
   if (loading) {
@@ -278,13 +305,16 @@ export default function PortfolioCarousel() {
                 {extendedImages.map((src, index) => (
                   <div
                     key={`${src}-${index}`}
-                    className="relative aspect-[3/4] rounded-lg overflow-hidden group cursor-pointer flex-shrink-0"
+                    className="relative aspect-[3/4] rounded-lg overflow-hidden group flex-shrink-0"
                     style={{
                       width: `calc((100% - ${(itemsToShow - 1) * 1.5}rem) / ${itemsToShow})`,
-                      pointerEvents: isDragging ? 'none' : 'auto',
                     }}
                     onDragStart={(e) => e.preventDefault()}
                   >
+                    <div
+                      className="absolute inset-0 z-10 cursor-pointer"
+                      onClick={(e) => handleImageClick(src, e)}
+                    />
                     <Image
                       src={src}
                       alt={`Portfolio image ${(index % portfolioImages.length) + 1}`}
@@ -293,7 +323,7 @@ export default function PortfolioCarousel() {
                       sizes="(max-width: 768px) 50vw, (max-width: 1199px) 33vw, 25vw"
                       draggable={false}
                     />
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300" />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 pointer-events-none" />
                   </div>
                 ))}
               </div>
@@ -330,6 +360,14 @@ export default function PortfolioCarousel() {
           </Link>
         </div>
       </div>
+
+      {/* Image Modal */}
+      <ImageModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        imageUrl={selectedImage}
+        alt="Portfolio image"
+      />
     </section>
   )
 }
