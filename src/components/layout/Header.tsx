@@ -107,9 +107,14 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu - FIXED: Added backdrop-blur-md and bg-background/95 */}
+      {/* Mobile Menu - Solid background */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 top-20 bg-background/95 backdrop-blur-md z-40 md:hidden">
+        <div 
+          className="fixed inset-0 top-20 bg-background z-40 md:hidden"
+          style={{
+            backgroundColor: 'rgb(10, 10, 10)'
+          }}
+        >
           <nav className="flex flex-col items-center space-y-8 pt-12">
             {navItems.map((item) => (
               <Link
