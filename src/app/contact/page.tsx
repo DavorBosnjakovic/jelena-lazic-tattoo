@@ -1,4 +1,5 @@
 // jela-website/src/app/contact/page.tsx
+
 import ContactForm from '@/components/contact/ContactForm'
 // TEMPORARILY COMMENTED OUT - Google Map import - UNCOMMENT WHEN ADDRESS IS CONFIRMED
 // import GoogleMap from '@/components/contact/GoogleMap'

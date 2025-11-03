@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
     const { data, error } = await resend.emails.send({
       from: 'Jelena Lazić Website <noreply@jelenalazictattoo.com>', // Update with your verified domain
       to: ['jelenalazictattoo@gmail.com'],
-      replyTo: email,
+      reply_to: email,
       subject: `New Contact Form Submission - ${fullName}`,
       html: `
         <!DOCTYPE html>
