@@ -8,6 +8,10 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 )
 
+// ⚠️ CRITICAL FIX: Tell Next.js to never cache this route
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 export async function GET() {
   try {
     console.log('🔍 API called')
@@ -37,7 +41,17 @@ export async function GET() {
 
     console.log('✅ Image files found:', imageFiles.length)
 
-    return NextResponse.json({ images: imageFiles })
+    // ⚠️ CRITICAL FIX: Add cache control headers to the response
+    return NextResponse.json(
+      { images: imageFiles },
+      {
+        headers: {
+          'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+          'Pragma': 'no-cache',
+          'Expires': '0',
+        },
+      }
+    )
   } catch (error) {
     console.error('Error fetching portfolio images:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
