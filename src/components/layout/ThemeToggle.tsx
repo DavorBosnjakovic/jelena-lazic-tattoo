@@ -36,12 +36,16 @@ export default function ThemeToggle() {
   }
 
   if (!mounted) {
-    return <div className="w-6 h-6" />
+    return <div className="w-8 h-8" />
   }
 
   return (
-    <button onClick={toggle} className="relative w-6 h-6 text-foreground hover:text-accent transition-colors duration-200" aria-label="Toggle theme">
-      {theme === 'dark' ? <Moon className="w-6 h-6" /> : <Sun className="w-6 h-6" />}
+    <button 
+      onClick={toggle} 
+      className="font-nav text-2xl font-medium text-background hover:text-accent transition-colors duration-200 flex items-center justify-center" 
+      aria-label="Toggle theme"
+    >
+      {theme === 'dark' ? <Sun className="w-8 h-8" /> : <Moon className="w-8 h-8" />}
     </button>
   )
 }

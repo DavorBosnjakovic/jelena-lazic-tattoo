@@ -107,14 +107,40 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu - Solid background */}
+      {/* Mobile Menu - Full screen overlay */}
       {mobileMenuOpen && (
-        <div 
-          className="fixed inset-0 top-20 bg-background z-40 md:hidden"
-          style={{
-            backgroundColor: 'rgb(10, 10, 10)'
-          }}
-        >
+        <div className="fixed inset-0 bg-foreground z-[100] md:hidden h-screen w-screen">
+          {/* Header bar replica */}
+          <div className="h-20 flex items-center justify-between px-6 lg:px-8 border-b border-background/10">
+            <Link
+              href="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="relative h-10 w-auto"
+            >
+              <Image
+                src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-dark-mode.png"
+                alt="Jelena Lazić Tattoo"
+                width={120}
+                height={40}
+                className="h-10 w-auto dark:hidden"
+              />
+              <Image
+                src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-light-mode.png"
+                alt="Jelena Lazić Tattoo"
+                width={120}
+                height={40}
+                className="h-10 w-auto hidden dark:block"
+              />
+            </Link>
+            <button
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-background hover:text-accent transition-colors duration-200"
+              aria-label="Close menu"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          </div>
+          
           <nav className="flex flex-col items-center space-y-8 pt-12">
             {navItems.map((item) => (
               <Link
@@ -123,15 +149,13 @@ export default function Header() {
                 className={`font-nav text-2xl font-medium transition-colors duration-200 ${
                   pathname === item.href
                     ? 'text-accent font-semibold'
-                    : 'text-foreground hover:text-accent'
+                    : 'text-background hover:text-accent'
                 }`}
               >
                 {item.label}
               </Link>
             ))}
-            <div className="pt-8">
-              <ThemeToggle />
-            </div>
+            <ThemeToggle />
           </nav>
         </div>
       )}
