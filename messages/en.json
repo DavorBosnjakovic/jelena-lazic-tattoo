@@ -184,7 +184,10 @@
     "formError": "Something went wrong. Please try again or email us directly at jelenalazictattoo@gmail.com",
     "invalidTitle": "Code Not Found",
     "invalidText": "This referral code isn't valid. Check the link, or simply get in touch — we'll figure it out.",
-    "invalidCta": "Contact Me"
+    "invalidCta": "Contact Me",
+    "orMessageTitle": "Prefer messaging?",
+    "orMessageText": "Message directly and mention your code — the discount applies all the same.",
+    "messagePrefill": "Hi! I have referral code {code} — I'd like to book a tattoo with the 10% discount."
   },
   "referralStatus": {
     "metaTitle": "My Referral Status - Jelena Lazić Tattoo",

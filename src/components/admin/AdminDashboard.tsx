@@ -542,6 +542,26 @@ function ClientCard({
     }
   }
 
+  const addManual = async () => {
+    const friendName = window.prompt(
+      `Ko je došao preko koda ${referrer.code}? Upiši ime:\n(za prijave koje su stigle porukom, mimo sajta)`
+    )?.trim()
+    if (!friendName) return
+    setBusy(true)
+    const res = await authFetch('/api/admin/referrals/create', {
+      method: 'POST',
+      body: JSON.stringify({ referrerId: referrer.id, friendName }),
+    })
+    setBusy(false)
+    if (res.ok) {
+      showToast(`Prijava "${friendName}" dodata — čeka u tabu Prijave ✓`)
+      onChanged()
+    } else {
+      const body = await res.json().catch(() => ({}))
+      showToast(body.error || 'Greška — pokušaj ponovo')
+    }
+  }
+
   const creditLabel = (r: Referral): string => {
     if (isCreditActive(r, now)) return `aktivan do ${r.credit_expires_at ? formatDate(r.credit_expires_at) : ''}`
     if (r.credit_status === 'used') return `iskorišćen ${r.used_at ? formatDate(r.used_at) : ''}`
@@ -585,6 +605,14 @@ function ClientCard({
             className="w-full px-4 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent"
           >
             Kopiraj link za deljenje
+          </button>
+
+          <button
+            onClick={addManual}
+            disabled={busy}
+            className="w-full px-4 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent disabled:opacity-50"
+          >
+            + Dodaj prijavu ručno
           </button>
 
           {completed.length > 0 && (

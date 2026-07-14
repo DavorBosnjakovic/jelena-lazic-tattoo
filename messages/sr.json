@@ -184,7 +184,10 @@
     "formError": "Nešto je pošlo naopako. Pokušaj ponovo ili nam piši direktno na jelenalazictattoo@gmail.com",
     "invalidTitle": "Kod nije pronađen",
     "invalidText": "Ovaj kod za preporuku ne važi. Proveri link, ili se jednostavno javi — rešićemo.",
-    "invalidCta": "Kontaktiraj me"
+    "invalidCta": "Kontaktiraj me",
+    "orMessageTitle": "Radije porukom?",
+    "orMessageText": "Javi se direktno i pomeni svoj kod — popust važi isto.",
+    "messagePrefill": "Zdravo! Imam kod za preporuku {code} — želim da zakažem tetovažu uz 10% popusta."
   },
   "referralStatus": {
     "metaTitle": "Moje stanje - Jelena Lazić Tattoo",

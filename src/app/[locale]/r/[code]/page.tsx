@@ -22,6 +22,16 @@ export async function generateMetadata({
   }
 }
 
+// The heading font has no "%" glyph, so render that character in the body font
+function renderWithPercent(text: string) {
+  const parts = text.split('%')
+  return parts.flatMap((part, i) =>
+    i === 0
+      ? [part]
+      : [<span key={i} className="font-body font-extrabold">%</span>, part]
+  )
+}
+
 async function findReferrer(code: string): Promise<Referrer | null> {
   const supabase = getServiceClient()
   const { data } = await supabase
@@ -67,7 +77,7 @@ export default async function ReferralLandingPage({
           <p className="text-sm font-nav uppercase tracking-widest text-accent mb-3">
             {t('badge', { name: referrer.name })}
           </p>
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">{t('title')}</h1>
+          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">{renderWithPercent(t('title'))}</h1>
           <p className="text-lg text-foreground/70">{t('subtitle')}</p>
           <div className="w-24 h-1 bg-accent mx-auto mt-6" />
         </div>
@@ -79,6 +89,31 @@ export default async function ReferralLandingPage({
 
         <h2 className="text-2xl font-heading font-bold mb-6">{t('formTitle')}</h2>
         <ReferralBookingForm code={referrer.code} />
+
+        <div className="mt-12 pt-10 border-t border-border text-center">
+          <h2 className="text-2xl font-heading font-bold mb-2">{t('orMessageTitle')}</h2>
+          <p className="text-foreground/70 font-body mb-6">{t('orMessageText')}</p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <a
+              href={`https://wa.me/381615849416?text=${encodeURIComponent(t('messagePrefill', { code: referrer.code }))}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent transition-all duration-200"
+            >
+              <img src="/social/whatsapp.webp" alt="" className="w-5 h-5" />
+              WhatsApp
+            </a>
+            <a
+              href="https://t.me/+381615849416"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent transition-all duration-200"
+            >
+              <img src="/social/telegram.webp" alt="" className="w-5 h-5" />
+              Telegram
+            </a>
+          </div>
+        </div>
       </div>
     </div>
   )
