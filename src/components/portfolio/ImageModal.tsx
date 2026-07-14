@@ -54,10 +54,10 @@ export default function ImageModal({
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center text-white hover:text-accent transition-colors duration-200"
+        className="group absolute top-4 right-4 z-50 w-10 h-10 flex items-center justify-center text-white"
         aria-label="Close modal"
       >
-        <X className="w-8 h-8" />
+        <X className="w-8 h-8 icon-glow" />
       </button>
 
       {/* Previous button */}
@@ -66,10 +66,10 @@ export default function ImageModal({
           e.stopPropagation()
           onPrev()
         }}
-        className="absolute left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-200"
+        className="group absolute left-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-200"
         aria-label="Previous image"
       >
-        <ChevronLeft className="w-8 h-8 text-white" />
+        <ChevronLeft className="w-8 h-8 text-white icon-glow" />
       </button>
 
       {/* Next button */}
@@ -78,10 +78,10 @@ export default function ImageModal({
           e.stopPropagation()
           onNext()
         }}
-        className="absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-200"
+        className="group absolute right-4 top-1/2 -translate-y-1/2 z-50 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-sm rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-200"
         aria-label="Next image"
       >
-        <ChevronRight className="w-8 h-8 text-white" />
+        <ChevronRight className="w-8 h-8 text-white icon-glow" />
       </button>
 
       {/* Image container */}

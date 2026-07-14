@@ -61,10 +61,10 @@ export default function Modal({
         {/* Close button */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-foreground hover:text-accent transition-colors duration-200"
+          className="group absolute top-4 right-4 text-foreground"
           aria-label="Close modal"
         >
-          <X className="w-6 h-6" />
+          <X className="w-6 h-6 icon-glow" />
         </button>
 
         {/* Title */}

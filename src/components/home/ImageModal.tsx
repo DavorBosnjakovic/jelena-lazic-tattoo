@@ -50,10 +50,10 @@ export default function ImageModal({ isOpen, onClose, imageUrl, alt }: ImageModa
       {/* Close button */}
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 z-10 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-all duration-200 border border-white/20"
+        className="group absolute top-4 right-4 z-10 w-12 h-12 flex items-center justify-center bg-white/10 backdrop-blur-md rounded-full hover:bg-white/20 transition-all duration-200 border border-white/20"
         aria-label="Close modal"
       >
-        <X className="w-6 h-6 text-white" />
+        <X className="w-6 h-6 text-white icon-glow" />
       </button>
 
       {/* Image container */}

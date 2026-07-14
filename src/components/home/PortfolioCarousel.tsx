@@ -4,13 +4,15 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import { Link } from '@/i18n/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ImageModal from './ImageModal'
 
 const SLIDES_TO_MOVE = 3
 
 export default function PortfolioCarousel() {
+  const t = useTranslations('carousel')
   const [portfolioImages, setPortfolioImages] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [currentIndex, setCurrentIndex] = useState(0)
@@ -227,7 +229,7 @@ export default function PortfolioCarousel() {
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
           <div className="text-center">
-            <div className="animate-pulse">Loading portfolio...</div>
+            <div className="animate-pulse">{t('loading')}</div>
           </div>
         </div>
       </section>
@@ -238,7 +240,7 @@ export default function PortfolioCarousel() {
     return (
       <section className="py-24 bg-background">
         <div className="container mx-auto px-6 lg:px-8">
-          <div className="text-center">No images found</div>
+          <div className="text-center">{t('noImages')}</div>
         </div>
       </section>
     )
@@ -255,10 +257,10 @@ export default function PortfolioCarousel() {
       <div className="container mx-auto px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            Portfolio
+            {t('title')}
           </h2>
           <p className="text-lg text-foreground/70 max-w-2xl mx-auto">
-            Explore a selection of custom tattoo designs combining artistic excellence with technical mastery
+            {t('subtitle')}
           </p>
         </div>
 
@@ -269,18 +271,18 @@ export default function PortfolioCarousel() {
         >
           <button
             onClick={handlePrev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-background hover:scale-110 transition-all duration-200 border border-border"
+            className="group absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 z-10 w-12 h-12 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-background hover:scale-110 transition-all duration-200 border border-border"
             aria-label="Previous images"
           >
-            <ChevronLeft className="w-6 h-6 text-foreground" />
+            <ChevronLeft className="w-6 h-6 text-foreground icon-glow" />
           </button>
 
           <button
             onClick={handleNext}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-background hover:scale-110 transition-all duration-200 border border-border"
+            className="group absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 z-10 w-12 h-12 flex items-center justify-center bg-background/80 backdrop-blur-sm rounded-full shadow-lg hover:bg-background hover:scale-110 transition-all duration-200 border border-border"
             aria-label="Next images"
           >
-            <ChevronRight className="w-6 h-6 text-foreground" />
+            <ChevronRight className="w-6 h-6 text-foreground icon-glow" />
           </button>
 
           <div className="max-w-7xl mx-auto">
@@ -317,7 +319,7 @@ export default function PortfolioCarousel() {
                     />
                     <Image
                       src={src}
-                      alt={`Portfolio image ${(index % portfolioImages.length) + 1}`}
+                      alt={t('imageAlt', { number: (index % portfolioImages.length) + 1 })}
                       fill
                       className="object-cover transition-transform duration-300 group-hover:scale-105"
                       sizes="(max-width: 768px) 50vw, (max-width: 1199px) 33vw, 25vw"
@@ -356,7 +358,7 @@ export default function PortfolioCarousel() {
             href="/portfolio"
             className="inline-block px-8 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200"
           >
-            View All Work
+            {t('viewAll')}
           </Link>
         </div>
       </div>

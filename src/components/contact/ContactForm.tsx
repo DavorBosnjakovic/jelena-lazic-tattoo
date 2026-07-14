@@ -4,6 +4,7 @@
 
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslations } from 'next-intl'
 
 type FormData = {
   fullName: string
@@ -13,6 +14,7 @@ type FormData = {
 }
 
 export default function ContactForm() {
+  const t = useTranslations('contactForm')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [message, setMessage] = useState('')
 
@@ -38,15 +40,15 @@ export default function ContactForm() {
 
       if (response.ok) {
         setStatus('success')
-        setMessage("Message sent! We'll get back to you soon.")
+        setMessage(t('success'))
         reset()
       } else {
         setStatus('error')
-        setMessage(result.error || 'Something went wrong. Please try again or email us directly at jelenalazictattoo@gmail.com')
+        setMessage(result.error || t('error'))
       }
     } catch (error) {
       setStatus('error')
-      setMessage('Something went wrong. Please try again or email us directly at jelenalazictattoo@gmail.com')
+      setMessage(t('error'))
     }
 
     // Reset status after 5 seconds
@@ -61,16 +63,16 @@ export default function ContactForm() {
       {/* Full Name */}
       <div>
         <label htmlFor="fullName" className="block text-sm font-body font-semibold mb-2">
-          Full Name <span className="text-accent">*</span>
+          {t('nameLabel')} <span className="text-accent">*</span>
         </label>
         <input
           id="fullName"
           type="text"
-          {...register('fullName', { required: 'Please enter your name' })}
+          {...register('fullName', { required: t('nameRequired') })}
           className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.fullName ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
-          placeholder="Your name"
+          placeholder={t('namePlaceholder')}
         />
         {errors.fullName && (
           <p className="mt-1 text-sm text-red-500">{errors.fullName.message}</p>
@@ -80,22 +82,22 @@ export default function ContactForm() {
       {/* Email */}
       <div>
         <label htmlFor="email" className="block text-sm font-body font-semibold mb-2">
-          Email <span className="text-accent">*</span>
+          {t('emailLabel')} <span className="text-accent">*</span>
         </label>
         <input
           id="email"
           type="email"
           {...register('email', {
-            required: 'Please enter your email',
+            required: t('emailRequired'),
             pattern: {
               value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: 'Please enter a valid email address',
+              message: t('emailInvalid'),
             },
           })}
           className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.email ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
-          placeholder="your@email.com"
+          placeholder={t('emailPlaceholder')}
         />
         {errors.email && (
           <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
@@ -105,36 +107,36 @@ export default function ContactForm() {
       {/* Phone */}
       <div>
         <label htmlFor="phone" className="block text-sm font-body font-semibold mb-2">
-          Phone Number <span className="text-foreground/50">(optional)</span>
+          {t('phoneLabel')} <span className="text-foreground/50">{t('phoneOptional')}</span>
         </label>
         <input
           id="phone"
           type="tel"
           {...register('phone')}
           className="w-full px-4 py-3 rounded-md border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
-          placeholder="+381 61 234 5678"
+          placeholder={t('phonePlaceholder')}
         />
       </div>
 
       {/* Message */}
       <div>
         <label htmlFor="message" className="block text-sm font-body font-semibold mb-2">
-          Message <span className="text-accent">*</span>
+          {t('messageLabel')} <span className="text-accent">*</span>
         </label>
         <textarea
           id="message"
           rows={6}
           {...register('message', {
-            required: 'Please enter your message',
+            required: t('messageRequired'),
             minLength: {
               value: 10,
-              message: 'Message must be at least 10 characters',
+              message: t('messageMin'),
             },
           })}
           className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none ${
             errors.message ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
-          placeholder="Tell me about your tattoo idea..."
+          placeholder={t('messagePlaceholder')}
         />
         {errors.message && (
           <p className="mt-1 text-sm text-red-500">{errors.message.message}</p>
@@ -147,7 +149,7 @@ export default function ContactForm() {
         disabled={status === 'loading'}
         className="w-full px-6 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
       >
-        {status === 'loading' ? 'Sending...' : 'Send Message'}
+        {status === 'loading' ? t('sending') : t('send')}
       </button>
 
       {/* Status Message */}

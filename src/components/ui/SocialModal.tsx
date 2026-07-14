@@ -59,8 +59,8 @@ function SocialModal(props: SocialModalProps) {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={onClose}>
       <div className="relative bg-white dark:bg-gray-900 rounded-xl shadow-2xl p-8 max-w-md w-full mx-4" onClick={(e) => e.stopPropagation()}>
-        <button onClick={onClose} className="absolute top-4 right-4" aria-label="Close">
-          <X className="w-6 h-6" />
+        <button onClick={onClose} className="group absolute top-4 right-4 text-foreground" aria-label="Close">
+          <X className="w-6 h-6 icon-glow" />
         </button>
         <h2 className="text-2xl font-bold mb-6 text-center">Connect With Me</h2>
         <div className="space-y-4">

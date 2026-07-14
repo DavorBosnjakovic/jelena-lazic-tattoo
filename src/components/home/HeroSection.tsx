@@ -5,45 +5,48 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
+import SocialIcon from '@/components/ui/SocialIcon'
 
 const heroImages = [
-  'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/hero-images/hero1.png',
-  'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/hero-images/hero2.png',
-  'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/hero-images/hero3.png',
-  'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/hero-images/hero4.png',
-  'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/hero-images/hero5.png',
-  'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/hero-images/hero6.png',
+  '/hero/hero1.webp',
+  '/hero/hero2.webp',
+  '/hero/hero3.webp',
+  '/hero/hero4.webp',
+  '/hero/hero5.webp',
+  '/hero/hero6.webp',
 ]
 
 const socialLinks = [
   {
     name: 'Instagram',
     url: 'https://www.instagram.com/jelena_lazic_tattoo',
-    icon: 'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/social-icons/instagram.png'
+    icon: '/social/instagram.webp'
   },
   {
     name: 'Facebook',
     url: 'https://www.facebook.com/jelenalazictattoo',
-    icon: 'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/social-icons/facebook.png'
+    icon: '/social/facebook.webp'
   },
   {
     name: 'TikTok',
     url: 'https://www.tiktok.com/@jelenalazictattoo',
-    icon: 'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/social-icons/tiktok.png'
+    icon: '/social/tiktok.webp'
   },
   {
     name: 'WhatsApp',
     url: 'https://wa.me/381615849416',
-    icon: 'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/social-icons/whatsapp.png'
+    icon: '/social/whatsapp.webp'
   },
   {
     name: 'Telegram',
     url: 'https://t.me/+381615849416',
-    icon: 'https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/social-icons/telegram.png'
+    icon: '/social/telegram.webp'
   },
 ]
 
 export default function HeroSection() {
+  const t = useTranslations('hero')
   const [animationComplete, setAnimationComplete] = useState(false)
 
   useEffect(() => {
@@ -70,7 +73,7 @@ export default function HeroSection() {
             >
               <Image
                 src={src}
-                alt={`Tattoo work ${index + 1}`}
+                alt={t('workAlt', { number: index + 1 })}
                 fill
                 className="object-cover"
                 priority={index < 3}
@@ -94,7 +97,7 @@ export default function HeroSection() {
             >
               <Image
                 src={src}
-                alt={`Tattoo work ${index + 1}`}
+                alt={t('workAlt', { number: index + 1 })}
                 fill
                 className="object-cover"
                 priority={index < 2}
@@ -139,20 +142,19 @@ export default function HeroSection() {
           }}
         >
           <Image
-            src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-light-mode.png"
-            alt="Jelena Lazić Tattoo"
+            src="/logos/logo-light-mode.webp"
+            alt={t('logoAlt')}
             width={550}
             height={220}
             className="w-full h-auto dark:hidden"
             priority
           />
           <Image
-            src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-dark-mode.png"
-            alt="Jelena Lazić Tattoo"
+            src="/logos/logo-dark-mode.webp"
+            alt={t('logoAlt')}
             width={550}
             height={220}
             className="w-full h-auto hidden dark:block"
-            priority
           />
         </div>
       </div>
@@ -174,14 +176,10 @@ export default function HeroSection() {
                 href={social.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="relative w-10 h-10 md:w-12 md:h-12 transition-transform duration-300 hover:scale-110"
+                aria-label={social.name}
+                className="group w-10 h-10 md:w-12 md:h-12 text-white transition-transform duration-300 hover:scale-110"
               >
-                <Image
-                  src={social.icon}
-                  alt={social.name}
-                  fill
-                  className="object-contain"
-                />
+                <SocialIcon icon={social.icon} name={social.name} className="w-full h-full" />
               </Link>
             ))}
           </div>

@@ -40,12 +40,12 @@ export default function ThemeToggle() {
   }
 
   return (
-    <button 
-      onClick={toggle} 
-      className="text-foreground hover:text-accent transition-colors duration-200 flex items-center justify-center" 
+    <button
+      onClick={toggle}
+      className="group text-foreground flex items-center justify-center"
       aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <Sun className="w-6 h-6" /> : <Moon className="w-6 h-6" />}
+      {theme === 'dark' ? <Sun className="w-6 h-6 icon-glow" /> : <Moon className="w-6 h-6 icon-glow" />}
     </button>
   )
 }

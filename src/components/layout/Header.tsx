@@ -3,20 +3,22 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
+import { useTranslations } from 'next-intl'
+import { Link, usePathname } from '@/i18n/navigation'
 import ThemeToggle from './ThemeToggle'
+import LocaleSwitcher from './LocaleSwitcher'
 
 const navItems = [
-  { label: 'About Me', href: '/about' },
-  { label: 'Portfolio', href: '/portfolio' },
-  { label: 'Store', href: '/store' },
-  { label: 'Contact', href: '/contact' },
-]
+  { key: 'about', href: '/about' },
+  { key: 'portfolio', href: '/portfolio' },
+  { key: 'store', href: '/store' },
+  { key: 'contact', href: '/contact' },
+] as const
 
 export default function Header() {
+  const t = useTranslations('nav')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
@@ -53,10 +55,11 @@ export default function Header() {
         <div className="flex h-20 items-center justify-between">
           <Link
             href="/"
+            aria-label={t('homeAria')}
             className="relative h-10 w-auto transition-transform duration-200 hover:scale-102"
           >
             <Image
-              src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-light-mode.png"
+              src="/logos/logo-light-mode.webp"
               alt="Jelena Lazić Tattoo"
               width={120}
               height={40}
@@ -64,7 +67,7 @@ export default function Header() {
               priority
             />
             <Image
-              src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-dark-mode.png"
+              src="/logos/logo-dark-mode.webp"
               alt="Jelena Lazić Tattoo"
               width={120}
               height={40}
@@ -84,24 +87,25 @@ export default function Header() {
                     : 'text-foreground hover:text-hover'
                 }`}
               >
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-5">
+            <LocaleSwitcher />
             <ThemeToggle />
           </div>
 
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-foreground hover:text-accent transition-colors duration-200"
+            className="group md:hidden text-foreground"
             aria-label="Toggle menu"
           >
             {mobileMenuOpen ? (
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6 icon-glow" />
             ) : (
-              <Menu className="w-6 h-6" />
+              <Menu className="w-6 h-6 icon-glow" />
             )}
           </button>
         </div>
@@ -115,17 +119,18 @@ export default function Header() {
             <Link
               href="/"
               onClick={() => setMobileMenuOpen(false)}
+              aria-label={t('homeAria')}
               className="relative h-10 w-auto"
             >
               <Image
-                src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-dark-mode.png"
+                src="/logos/logo-dark-mode.webp"
                 alt="Jelena Lazić Tattoo"
                 width={120}
                 height={40}
                 className="h-10 w-auto dark:hidden"
               />
               <Image
-                src="https://exwuyunznlrgscchbnef.supabase.co/storage/v1/object/public/logos/logo-light-mode.png"
+                src="/logos/logo-light-mode.webp"
                 alt="Jelena Lazić Tattoo"
                 width={120}
                 height={40}
@@ -134,13 +139,13 @@ export default function Header() {
             </Link>
             <button
               onClick={() => setMobileMenuOpen(false)}
-              className="text-background hover:text-accent transition-colors duration-200"
+              className="group text-background"
               aria-label="Close menu"
             >
-              <X className="w-6 h-6" />
+              <X className="w-6 h-6 icon-glow" />
             </button>
           </div>
-          
+
           <nav className="flex flex-col items-center space-y-8 pt-12">
             {navItems.map((item) => (
               <Link
@@ -152,10 +157,13 @@ export default function Header() {
                     : 'text-background hover:text-accent'
                 }`}
               >
-                {item.label}
+                {t(item.key)}
               </Link>
             ))}
-            <ThemeToggle />
+            <div className="flex items-center gap-6 pt-4">
+              <LocaleSwitcher />
+              <ThemeToggle />
+            </div>
           </nav>
         </div>
       )}

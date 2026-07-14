@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import ImageModal from './ImageModal'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -81,6 +82,7 @@ function PortfolioImage({ src, alt, onClick }: { src: string; alt: string; onCli
 }
 
 export default function PortfolioGrid() {
+  const t = useTranslations('portfolio')
   const [portfolioImages, setPortfolioImages] = useState<string[]>([])
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(1)
@@ -143,7 +145,7 @@ export default function PortfolioGrid() {
     return (
       <div className="container mx-auto px-6 py-12">
         <div className="text-center">
-          <div className="animate-pulse text-lg">Loading portfolio...</div>
+          <div className="animate-pulse text-lg">{t('loading')}</div>
         </div>
       </div>
     )
@@ -152,7 +154,7 @@ export default function PortfolioGrid() {
   if (portfolioImages.length === 0) {
     return (
       <div className="container mx-auto px-6 py-12">
-        <div className="text-center">No images found in portfolio</div>
+        <div className="text-center">{t('noImages')}</div>
       </div>
     )
   }
@@ -164,7 +166,7 @@ export default function PortfolioGrid() {
           <PortfolioImage
             key={startIndex + index}
             src={image}
-            alt={`Tattoo design ${startIndex + index + 1}`}
+            alt={t('imageAlt', { number: startIndex + index + 1 })}
             onClick={() => openModal(image, index)}
           />
         ))}
@@ -177,7 +179,7 @@ export default function PortfolioGrid() {
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
               className="p-3 rounded-lg border border-border bg-background hover:bg-accent hover:text-white hover:border-accent transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-foreground disabled:hover:border-border"
-              aria-label="Previous page"
+              aria-label={t('prevAria')}
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
@@ -202,14 +204,14 @@ export default function PortfolioGrid() {
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
               className="p-3 rounded-lg border border-border bg-background hover:bg-accent hover:text-white hover:border-accent transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-foreground disabled:hover:border-border"
-              aria-label="Next page"
+              aria-label={t('nextAria')}
             >
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
 
           <div className="text-center mt-6 text-sm text-foreground/60">
-            Showing {startIndex + 1}-{Math.min(endIndex, portfolioImages.length)} of {portfolioImages.length} designs
+            {t('showing', { from: startIndex + 1, to: Math.min(endIndex, portfolioImages.length), total: portfolioImages.length })}
           </div>
         </>
       )}
