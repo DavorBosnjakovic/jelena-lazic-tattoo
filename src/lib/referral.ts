@@ -37,12 +37,12 @@ export type Referral = {
 const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789'
 
 export function generateCode(): string {
-  const bytes = randomBytes(4)
+  const bytes = randomBytes(8)
   let suffix = ''
-  for (let i = 0; i < 4; i++) {
+  for (let i = 0; i < 8; i++) {
     suffix += CODE_ALPHABET[bytes[i] % CODE_ALPHABET.length]
   }
-  return `JELA-${suffix}`
+  return `TATTOO-${suffix}`
 }
 
 export function generateSecret(): string {

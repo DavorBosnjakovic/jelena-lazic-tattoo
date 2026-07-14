@@ -1,5 +1,5 @@
 // jela-website/src/app/api/referral/qr/route.ts
-// GET ?code=JELA-XXXX -> PNG image of the QR code pointing to the landing page.
+// GET ?code=TATTOO-XXXXXXXX -> PNG image of the QR code pointing to the landing page.
 // Used both in emails and on the status page.
 
 import { NextRequest, NextResponse } from 'next/server'
