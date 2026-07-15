@@ -112,6 +112,13 @@ export default async function ReferralLandingPage({
               <img src="/social/telegram.webp" alt="" className="w-5 h-5" />
               Telegram
             </a>
+            <a
+              href="viber://chat?number=%2B381615849416"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent transition-all duration-200"
+            >
+              <img src="/social/viber.svg" alt="" className="w-5 h-5" />
+              Viber
+            </a>
           </div>
         </div>
       </div>
