@@ -5,7 +5,7 @@ import path from 'path'
 import { NextResponse } from 'next/server'
 
 // Read the list at build time. Drop a `portfolio-*.jpg` file into
-// public/portfolio/ and redeploy — it gets picked up automatically.
+// public/portfolio/ and redeploy - it gets picked up automatically.
 export const dynamic = 'force-static'
 
 export async function GET() {

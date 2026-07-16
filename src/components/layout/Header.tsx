@@ -13,7 +13,7 @@ import LocaleSwitcher from './LocaleSwitcher'
 const navItems = [
   { key: 'about', href: '/about' },
   { key: 'portfolio', href: '/portfolio' },
-  { key: 'store', href: '/store' },
+  { key: 'refer', href: '/preporuci' },
   { key: 'contact', href: '/contact' },
 ] as const
 

@@ -337,7 +337,7 @@ function PendingCard({
       onChanged()
     } else {
       const body = await res.json().catch(() => ({}))
-      showToast(body.error || 'Greška — pokušaj ponovo')
+      showToast(body.error || 'Greška - pokušaj ponovo')
     }
   }
 
@@ -350,7 +350,7 @@ function PendingCard({
     })
     setBusy(false)
     if (res.ok) onChanged()
-    else showToast('Greška — pokušaj ponovo')
+    else showToast('Greška - pokušaj ponovo')
   }
 
   return (
@@ -529,7 +529,7 @@ function ClientCard({
       onChanged()
     } else {
       const body = await res.json().catch(() => ({}))
-      showToast(body.error || 'Greška — pokušaj ponovo')
+      showToast(body.error || 'Greška - pokušaj ponovo')
     }
   }
 
@@ -554,11 +554,11 @@ function ClientCard({
     })
     setBusy(false)
     if (res.ok) {
-      showToast(`Prijava "${friendName}" dodata — čeka u tabu Prijave ✓`)
+      showToast(`Prijava "${friendName}" dodata - čeka u tabu Prijave ✓`)
       onChanged()
     } else {
       const body = await res.json().catch(() => ({}))
-      showToast(body.error || 'Greška — pokušaj ponovo')
+      showToast(body.error || 'Greška - pokušaj ponovo')
     }
   }
 
@@ -670,7 +670,7 @@ function NewReferrerModal({
       )
     } else {
       const body = await res.json().catch(() => ({}))
-      setError(body.error || 'Greška — pokušaj ponovo')
+      setError(body.error || 'Greška - pokušaj ponovo')
     }
   }
 

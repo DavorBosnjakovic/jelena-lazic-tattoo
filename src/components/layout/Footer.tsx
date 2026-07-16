@@ -9,6 +9,7 @@ const menuLinks = [
   { key: 'portfolio', href: '/portfolio' },
   { key: 'store', href: '/store' },
   { key: 'contact', href: '/contact' },
+  { key: 'refer', href: '/preporuci' },
 ] as const
 
 const socialLinks = [

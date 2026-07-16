@@ -25,7 +25,7 @@ const freedoomed = localFont({
 
 export const metadata: Metadata = {
   title: 'Jelena Admin',
-  description: 'Referal program — admin panel',
+  description: 'Referal program - admin panel',
   manifest: '/admin-manifest.json',
   robots: { index: false, follow: false },
   icons: {

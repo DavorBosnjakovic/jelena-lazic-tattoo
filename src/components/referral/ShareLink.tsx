@@ -15,7 +15,7 @@ export default function ShareLink({ url }: { url: string }) {
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch {
-      // Clipboard unavailable (e.g. very old browser) — the link is visible below anyway
+      // Clipboard unavailable (e.g. very old browser) - the link is visible below anyway
     }
   }
 

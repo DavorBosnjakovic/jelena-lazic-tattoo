@@ -104,7 +104,7 @@ function wrap(title: string, bodyHtml: string): string {
 export const referralEmails = {
   // 1. To the client, when Jelena creates their code
   codeCreated: (data: { name: string; code: string; secret: string }) => ({
-    subject: `Tvoj lični kod za preporuke — ${data.code}`,
+    subject: `Tvoj lični kod za preporuke - ${data.code}`,
     html: wrap(
       'Tvoj kod za preporuke',
       `
@@ -121,16 +121,16 @@ export const referralEmails = {
         <ul>
           <li>Ko dođe na tetovažu s tvojim kodom dobija <strong>${CREDIT_PERCENT}% popusta</strong>.</li>
           <li>Ti dobijaš <strong>${CREDIT_PERCENT}% vrednosti njegove tetovaže</strong> kao popust na svoju sledeću.</li>
-          <li>Popusti se sabiraju — više preporuka, veći popust.</li>
+          <li>Popusti se sabiraju - više preporuka, veći popust.</li>
         </ul>
         <p style="text-align: center;">
           <a href="${referralLandingUrl(data.code)}" class="button">Link za deljenje</a>
         </p>
-        <p>Svoje stanje — koliko si zaradio/la i ko je došao preko tebe — uvek možeš videti ovde:</p>
+        <p>Svoje stanje - koliko si zaradio/la i ko je došao preko tebe - uvek možeš videti ovde:</p>
         <p style="text-align: center;">
           <a href="${referralStatusUrl(data.secret)}" class="button" style="background-color: #555;">Moje stanje</a>
         </p>
-        <p style="font-size: 13px; color: #666;">Link "Moje stanje" je samo tvoj — nemoj ga deliti. Za deljenje koristi QR kod ili "Link za deljenje".</p>
+        <p style="font-size: 13px; color: #666;">Link "Moje stanje" je samo tvoj - nemoj ga deliti. Za deljenje koristi QR kod ili "Link za deljenje".</p>
       `
     ),
   }),
@@ -146,9 +146,9 @@ export const referralEmails = {
   }) => ({
     subject: `Nova prijava preko koda ${data.code} (${data.referrerName})`,
     html: wrap(
-      'Nova prijava — referal program',
+      'Nova prijava - referal program',
       `
-        <p><strong>${data.friendName}</strong> želi termin, a došao/la je preko koda <strong>${data.code}</strong> (${data.referrerName}) — ima pravo na ${CREDIT_PERCENT}% popusta.</p>
+        <p><strong>${data.friendName}</strong> želi termin, a došao/la je preko koda <strong>${data.code}</strong> (${data.referrerName}) - ima pravo na ${CREDIT_PERCENT}% popusta.</p>
         <div class="highlight">
           ${data.friendEmail ? `<p style="margin: 5px 0;"><strong>Email:</strong> <a href="mailto:${data.friendEmail}">${data.friendEmail}</a></p>` : ''}
           ${data.friendPhone ? `<p style="margin: 5px 0;"><strong>Telefon:</strong> ${data.friendPhone}</p>` : ''}
@@ -173,7 +173,7 @@ export const referralEmails = {
       'Tvoja preporuka se isplatila!',
       `
         <p>Zdravo ${data.name},</p>
-        <p><strong>${data.friendName}</strong> je iskoristio/la tvoj kod — i time si zaradio/la:</p>
+        <p><strong>${data.friendName}</strong> je iskoristio/la tvoj kod - i time si zaradio/la:</p>
         <div class="highlight">
           <div class="amount">${formatEur(data.creditEur)}</div>
           <p style="text-align: center; margin: 5px 0 0 0; color: #666;">popusta na tvoju sledeću tetovažu</p>
@@ -198,7 +198,7 @@ export const referralEmails = {
       'Tvoj popust uskoro ističe',
       `
         <p>Zdravo ${data.name},</p>
-        <p>samo da te podsetimo — imaš <strong>${formatEur(data.expiringEur)}</strong> popusta koji ističe <strong>${formatDateSr(data.expiresAt)}</strong>.</p>
+        <p>samo da te podsetimo - imaš <strong>${formatEur(data.expiringEur)}</strong> popusta koji ističe <strong>${formatDateSr(data.expiresAt)}</strong>.</p>
         <p>Ako planiraš novu tetovažu, javi se na vreme da ga iskoristiš!</p>
         <p style="text-align: center;">
           <a href="${referralStatusUrl(data.secret)}" class="button">Pogledaj svoje stanje</a>

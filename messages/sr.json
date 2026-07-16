@@ -4,7 +4,7 @@
     "description": "Akademska slikarka i profesionalna tatu umetnica u Beogradu. Autorski tatu dizajni koji spajaju umetničku izvrsnost i tehničko majstorstvo od 2013. godine.",
     "keywords": "tatu umetnica Beograd, custom tatu, realistična tetovaža, tetovaže Srbija, Jelena Lazić",
     "ogTitle": "Jelena Lazić - Profesionalna tatu umetnica",
-    "ogDescription": "Autorski tatu dizajni u Beogradu — akademska slikarka Jelena Lazić"
+    "ogDescription": "Autorski tatu dizajni u Beogradu - akademska slikarka Jelena Lazić"
   },
   "nav": {
     "home": "Početna",
@@ -12,6 +12,7 @@
     "portfolio": "Portfolio",
     "store": "Prodavnica",
     "contact": "Kontakt",
+    "refer": "Preporuči me",
     "homeAria": "Jelena Lazić početna"
   },
   "localeSwitcher": {
@@ -53,9 +54,9 @@
     "metaTitle": "O meni - Jelena Lazić | Akademska slikarka i tatu umetnica",
     "metaDescription": "Upoznajte Jelenu Lazić, akademsku slikarku i profesionalnu tatu umetnicu u Beogradu. Spoj umetničke izvrsnosti i tetoviranja od 2013. godine.",
     "title": "O meni",
-    "imageAlt": "Jelena Lazić — tatu umetnica",
+    "imageAlt": "Jelena Lazić - tatu umetnica",
     "p1": "Akademska sam slikarka, diplomirala sam na Fakultetu primenjenih umetnosti, na Odseku za zidno slikarstvo. Nakon uspešnih projekata murala, učestvovala sam na brojnim grupnim izložbama, istražujući granice vizuelnog izraza kroz različite medije.",
-    "p2": "Od 2013. godine radim kao tatu umetnica, spajajući svoje umetničke veštine sa ovim jedinstvenim medijem. Moje tetovaže često odražavaju uticaje mog slikarskog stila — donoseći istu pažnju prema kompoziciji, teoriji boja i naraciji koju sam razvila u svom likovnom radu.",
+    "p2": "Od 2013. godine radim kao tatu umetnica, spajajući svoje umetničke veštine sa ovim jedinstvenim medijem. Moje tetovaže često odražavaju uticaje mog slikarskog stila - donoseći istu pažnju prema kompoziciji, teoriji boja i naraciji koju sam razvila u svom likovnom radu.",
     "p3": "Trenutno živim i radim u Beogradu, gde nastavljam da razvijam svoj umetnički izraz. Svakoj tetovaži pristupam kao jedinstvenoj umetničkoj saradnji, spajajući tehničko majstorstvo i kreativnu viziju kako bih stvorila trajna umetnička dela na koži.",
     "educationTitle": "Obrazovanje",
     "educationText": "Fakultet primenjenih umetnosti, Odsek za zidno slikarstvo. Akademsko obrazovanje u tradicionalnim i savremenim likovnim tehnikama, sa fokusom na vizuelnu kompoziciju velikog formata.",
@@ -160,10 +161,10 @@
   },
   "referral": {
     "metaTitle": "Tvojih 10% popusta - Jelena Lazić Tattoo",
-    "metaDescription": "Preporučio te prijatelj — zakaži tetovažu uz 10% popusta.",
+    "metaDescription": "Preporučio te prijatelj - zakaži tetovažu uz 10% popusta.",
     "badge": "Preporuka: {name}",
     "title": "Imaš 10% popusta",
-    "subtitle": "Prijatelj ti je preporučio Jelenu — zakaži tetovažu i popust je tvoj.",
+    "subtitle": "Prijatelj ti je preporučio Jelenu - zakaži tetovažu i popust je tvoj.",
     "codeLabel": "Tvoj kod za popust",
     "formTitle": "Zakaži termin",
     "nameLabel": "Ime i prezime",
@@ -180,14 +181,32 @@
     "messagePlaceholder": "Ispričaj mi o svojoj ideji za tetovažu...",
     "send": "Pošalji prijavu",
     "sending": "Slanje...",
-    "formSuccess": "Prijava je poslata! Jelena će ti se javiti uskoro — tvojih 10% popusta je zabeleženo.",
+    "formSuccess": "Prijava je poslata! Jelena će ti se javiti uskoro - tvojih 10% popusta je zabeleženo.",
     "formError": "Nešto je pošlo naopako. Pokušaj ponovo ili nam piši direktno na jelenalazictattoo@gmail.com",
     "invalidTitle": "Kod nije pronađen",
-    "invalidText": "Ovaj kod za preporuku ne važi. Proveri link, ili se jednostavno javi — rešićemo.",
+    "invalidText": "Ovaj kod za preporuku ne važi. Proveri link, ili se jednostavno javi - rešićemo.",
     "invalidCta": "Kontaktiraj me",
     "orMessageTitle": "Radije porukom?",
-    "orMessageText": "Javi se direktno i pomeni svoj kod — popust važi isto.",
-    "messagePrefill": "Zdravo! Imam kod za preporuku {code} — želim da zakažem tetovažu uz 10% popusta."
+    "orMessageText": "Javi se direktno i pomeni svoj kod - popust važi isto.",
+    "messagePrefill": "Zdravo! Imam kod za preporuku {code} - želim da zakažem tetovažu uz 10% popusta."
+  },
+  "refer": {
+    "metaTitle": "Preporuči me i zaradi popust - Jelena Lazić Tattoo",
+    "metaDescription": "Preporuči prijatelju tetovažu kod Jelene - on dobija 10% popusta, a ti zarađuješ popust za svoju sledeću.",
+    "title": "Preporuči me i zaradi popust",
+    "subtitle": "Preporuči prijatelju i oboje dobijate popust - njemu 10% odmah, a tebi 10% vrednosti njegove tetovaže za tvoju sledeću.",
+    "step1Title": "Zatraži svoj kod",
+    "step1Text": "Javi se porukom i na email ti stiže tvoj lični QR kod.",
+    "step2Title": "Podeli ga",
+    "step2Text": "Pokaži QR kod prijatelju ili mu pošalji link - kako ti je zgodnije.",
+    "step3Title": "Svi dobijaju",
+    "step3Text": "Prijatelj dobija 10% popusta na tetovažu, a tebi ostaje 10% vrednosti njegove tetovaže kao popust za tvoju sledeću.",
+    "note": "Popusti se sabiraju - više preporuka, veći popust. Zarađeni popusti važe 3 godine.",
+    "ctaTitle": "Zatraži svoj kod",
+    "ctaText": "Pošalji poruku i Jelena ti šalje lični kod:",
+    "requestPrefill": "Zdravo! Želim svoj kod za preporuke 🙂",
+    "emailSubject": "Kod za preporuke",
+    "emailBody": "Zdravo! Želim svoj kod za preporuke. Moje ime: "
   },
   "referralStatus": {
     "metaTitle": "Moje stanje - Jelena Lazić Tattoo",
@@ -198,7 +217,7 @@
     "statReferrals": "Uspešnih preporuka",
     "statEarned": "Ukupno zarađeno",
     "shareTitle": "Podeli svoj kod",
-    "shareText": "Ko zakaže s tvojim kodom dobija 10% popusta — a ti zarađuješ 10% vrednosti njegove tetovaže.",
+    "shareText": "Ko zakaže s tvojim kodom dobija 10% popusta - a ti zarađuješ 10% vrednosti njegove tetovaže.",
     "shareButton": "Podeli",
     "copyLink": "Kopiraj link",
     "copied": "Kopirano!",

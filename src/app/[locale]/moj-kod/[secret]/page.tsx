@@ -1,5 +1,5 @@
 // jela-website/src/app/[locale]/moj-kod/[secret]/page.tsx
-// Private status page for a referrer — reached only via the secret link
+// Private status page for a referrer - reached only via the secret link
 // from their email. Shows balance, QR code and referral history.
 
 import type { Metadata } from 'next'

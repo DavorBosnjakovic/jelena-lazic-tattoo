@@ -1,5 +1,5 @@
 // jela-website/src/lib/supabase-browser.ts
-// Browser Supabase client (anon key) — used only for Jelena's admin login.
+// Browser Supabase client (anon key) - used only for Jelena's admin login.
 // All data goes through server API routes; the anon key has no table access.
 
 import { createClient, SupabaseClient } from '@supabase/supabase-js'

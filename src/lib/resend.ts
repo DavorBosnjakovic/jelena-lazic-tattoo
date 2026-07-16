@@ -196,7 +196,7 @@ export const emailTemplates = {
                 <li>Booking availability</li>
               </ul>
               
-              <p>I promise to keep these emails infrequent and valuable—no spam, just art!</p>
+              <p>I promise to keep these emails infrequent and valuable-no spam, just art!</p>
               
               <div style="text-align: center;">
                 <a href="https://jelenalazictattoo.com/portfolio" class="button">View Portfolio</a>
