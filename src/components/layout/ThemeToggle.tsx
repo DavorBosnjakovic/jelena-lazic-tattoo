@@ -6,21 +6,16 @@ import { Moon, Sun } from 'lucide-react'
 import { useState, useEffect } from 'react'
 
 export default function ThemeToggle() {
-  const [theme, setTheme] = useState('light')
+  const [theme, setTheme] = useState('dark')
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    // Default to dark unless the user explicitly chose light
     const saved = localStorage.getItem('theme')
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-    
-    if (saved) {
-      setTheme(saved)
-      document.documentElement.classList.toggle('dark', saved === 'dark')
-    } else if (prefersDark) {
-      setTheme('dark')
-      document.documentElement.classList.add('dark')
-    }
+    const initial = saved === 'light' ? 'light' : 'dark'
+    setTheme(initial)
+    document.documentElement.classList.toggle('dark', initial === 'dark')
   }, [])
 
   function toggle() {
