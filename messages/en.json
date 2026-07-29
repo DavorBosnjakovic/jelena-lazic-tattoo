@@ -51,7 +51,7 @@
     "hoursValue": "10:00 - 17:00"
   },
   "about": {
-    "metaTitle": "About Me - Jelena Lazić | Academic Painter & Tattoo Artist",
+    "metaTitle": "About Me - Jelena Lazić | Academic Painter and Tattoo Artist",
     "metaDescription": "Learn about Jelena Lazić, academic painter and professional tattoo artist in Belgrade. Combining artistic excellence with tattooing since 2013.",
     "title": "About Me",
     "imageAlt": "Jelena Lazić - Tattoo Artist",
@@ -65,7 +65,7 @@
     "specialtiesTitle": "Specialties",
     "specialties": [
       "Custom Realistic Tattoos",
-      "Black & Grey Work",
+      "Black and Grey Work",
       "Color Compositions",
       "Fine Line Details",
       "Artistic Concept Development"
@@ -82,7 +82,7 @@
   },
   "portfolio": {
     "metaTitle": "Portfolio - Jelena Lazić | Custom Tattoo Designs",
-    "metaDescription": "Browse the complete portfolio of custom tattoo designs by Jelena Lazić. Realistic, black & grey, and color tattoo art in Belgrade.",
+    "metaDescription": "Browse the complete portfolio of custom tattoo designs by Jelena Lazić. Realistic, black and grey, and color tattoo art in Belgrade.",
     "title": "Portfolio",
     "subtitle": "A collection of custom tattoo designs combining artistic vision with technical excellence",
     "loading": "Loading portfolio...",
@@ -93,7 +93,7 @@
     "imageAlt": "Tattoo design {number}"
   },
   "store": {
-    "metaTitle": "Store - Jelena Lazić | Custom Designs & Prints (Coming Soon)",
+    "metaTitle": "Store - Jelena Lazić | Custom Designs and Prints (Coming Soon)",
     "metaDescription": "Shop custom tattoo designs, prints, and merchandise by Jelena Lazić. Exclusive and classic designs available soon.",
     "title": "Store",
     "comingSoon": "Coming Soon",
@@ -191,9 +191,9 @@
     "messagePrefill": "Hi! I have referral code {code} - I'd like to book a tattoo with the 10% discount."
   },
   "refer": {
-    "metaTitle": "Refer Me & Earn a Discount - Jelena Lazić Tattoo",
+    "metaTitle": "Refer Me and Earn a Discount - Jelena Lazić Tattoo",
     "metaDescription": "Recommend Jelena to a friend - they get 10% off their tattoo, and you earn a discount on your next one.",
-    "title": "Refer Me & Earn a Discount",
+    "title": "Refer Me and Earn a Discount",
     "subtitle": "Recommend a friend and you both get a discount - they get 10% right away, and you earn 10% of their tattoo's value toward your next one.",
     "step1Title": "Request your code",
     "step1Text": "Send a message and your personal QR code arrives by email.",

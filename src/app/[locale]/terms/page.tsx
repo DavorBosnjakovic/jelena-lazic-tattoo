@@ -1,7 +1,7 @@
 // jela-website/src/app/terms/page.tsx
 
 export const metadata = {
-  title: 'Terms & Conditions - Jelena Lazić Tattoo',
+  title: 'Terms and Conditions - Jelena Lazić Tattoo',
   description: 'Terms and conditions for using the Jelena Lazić Tattoo website and services.',
 }
 
@@ -12,7 +12,7 @@ export default function TermsPage() {
         {/* Page Title */}
         <div className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-heading font-bold mb-4">
-            Terms & Conditions
+            Terms and Conditions
           </h1>
           <p className="text-foreground/70">
             Last updated: October 24, 2025
@@ -234,7 +234,7 @@ export default function TermsPage() {
           <section className="mb-12">
             <h2>Contact Information</h2>
             <p>
-              If you have any questions about these Terms & Conditions, please contact us:
+              If you have any questions about these Terms and Conditions, please contact us:
             </p>
             <ul className="list-none pl-0">
               <li><strong>Email:</strong> jelenalazictattoo@gmail.com</li>
@@ -247,7 +247,7 @@ export default function TermsPage() {
             <h2>Acknowledgment</h2>
             <p>
               By using our Site, you acknowledge that you have read, understood, and agree to be 
-              bound by these Terms & Conditions, as well as our Privacy Policy.
+              bound by these Terms and Conditions, as well as our Privacy Policy.
             </p>
           </section>
 

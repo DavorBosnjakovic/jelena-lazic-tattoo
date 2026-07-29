@@ -160,7 +160,7 @@ export default function Header() {
                 {t(item.key)}
               </Link>
             ))}
-            <div className="flex items-center gap-6 pt-4">
+            <div className="flex items-center gap-6 pt-4 text-background">
               <LocaleSwitcher />
               <ThemeToggle />
             </div>
