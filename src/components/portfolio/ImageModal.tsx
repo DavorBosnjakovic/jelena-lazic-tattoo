@@ -2,9 +2,10 @@
 
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import useHorizontalDrag from '@/components/ui/useHorizontalDrag'
 
 interface ImageModalProps {
   isOpen: boolean
@@ -14,6 +15,18 @@ interface ImageModalProps {
   onPrev: () => void
 }
 
+// How far a swipe has to travel before it counts as a move to the next
+// picture, as a share of the screen's width. Anything shorter springs back.
+const SWIPE_SHARE = 0.18
+
+// A short flick counts as well, however little ground it actually covered.
+// Pixels per second.
+const FLICK = 520
+
+// How far off centre the arriving picture starts. Capped, so a long drag does
+// not throw it in from the far side of the county.
+const ARRIVES_FROM = 160
+
 export default function ImageModal({
   isOpen,
   imageSrc,
@@ -21,6 +34,8 @@ export default function ImageModal({
   onNext,
   onPrev,
 }: ImageModalProps) {
+  const stage = useRef<HTMLDivElement | null>(null)
+
   // Prevent scroll when modal is open
   useEffect(() => {
     if (isOpen) {
@@ -44,12 +59,54 @@ export default function ImageModal({
     return () => document.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose, onNext, onPrev])
 
+  // Written straight onto the element rather than held in state: a re-render
+  // for every pixel of a drag would drop frames on a phone, which is the one
+  // place this matters.
+  const place = (x: number, settling: boolean) => {
+    const element = stage.current
+    if (!element) return
+    element.style.transition = settling
+      ? 'transform 280ms cubic-bezier(0.2, 0.8, 0.2, 1)'
+      : 'none'
+    element.style.transform = `translate3d(${x.toFixed(1)}px, 0, 0)`
+  }
+
+  const { dragged, handlers } = useHorizontalDrag({
+    onMove: (dx) => place(dx, false),
+    onEnd: (dx, velocity) => {
+      if (dx === 0) return
+
+      const far = Math.abs(dx) > window.innerWidth * SWIPE_SHARE
+      const fast = Math.abs(velocity) > FLICK
+      if (!far && !fast) {
+        place(0, true)
+        return
+      }
+
+      // Left means forward, the way a stack of photographs is dealt through.
+      const direction = dx < 0 ? 1 : -1
+      if (direction === 1) onNext()
+      else onPrev()
+
+      // The new picture comes in from the side the swipe was heading towards.
+      // Sprung back from where the old one was let go instead, it would arrive
+      // from the wrong side and read as the swipe being undone.
+      place(direction * Math.min(ARRIVES_FROM, Math.abs(dx)), false)
+      requestAnimationFrame(() => place(0, true))
+    },
+  })
+
   if (!isOpen) return null
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fadeIn"
-      onClick={onClose}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fadeIn touch-pan-y"
+      // A drag that happens to finish over the backdrop is still a drag, and
+      // must not be taken for a click on it.
+      onClick={() => {
+        if (!dragged.current) onClose()
+      }}
+      {...handlers}
     >
       {/* Close button */}
       <button
@@ -89,13 +146,17 @@ export default function ImageModal({
         className="relative max-w-7xl max-h-[90vh] w-full mx-4 animate-scaleIn"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="relative w-full h-full">
+        {/* The drag rides on this layer, not on the one above it: that one
+            carries the opening animation, and the two would overwrite each
+            other's transform. */}
+        <div ref={stage} className="relative w-full h-full">
           <Image
             src={imageSrc}
             alt="Tattoo design full view"
             width={1200}
             height={1600}
-            className="w-auto h-auto max-w-full max-h-[90vh] object-contain mx-auto"
+            className="w-auto h-auto max-w-full max-h-[90vh] object-contain mx-auto select-none"
+            draggable={false}
             priority
           />
         </div>

@@ -78,7 +78,7 @@ export async function generateMetadata({
       url: locale === routing.defaultLocale ? '/' : `/${locale}`,
       images: [
         {
-          url: '/og-image.jpg',
+          url: '/og-image-hero.jpg',
           width: 1200,
           height: 630,
           alt: 'Jelena Lazić - Professional Tattoo Artist, Belgrade',
@@ -89,7 +89,7 @@ export async function generateMetadata({
       card: 'summary_large_image',
       title: t('ogTitle'),
       description: t('ogDescription'),
-      images: ['/og-image.jpg'],
+      images: ['/og-image-hero.jpg'],
     },
   }
 }

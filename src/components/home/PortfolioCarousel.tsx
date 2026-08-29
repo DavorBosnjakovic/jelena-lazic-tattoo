@@ -9,6 +9,7 @@ import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import ImageModal from './ImageModal'
+import useHorizontalDrag from '@/components/ui/useHorizontalDrag'
 
 // Pixels per second the strip drifts. Slow enough to read, never stops.
 const DRIFT = 26
@@ -18,6 +19,12 @@ const NUDGE = 420
 
 // How quickly an arrow nudge is eaten up. Higher glides in faster.
 const NUDGE_EASE = 4.5
+
+// A flick carries on after the finger leaves: roughly this many seconds of
+// travel at the speed it was let go at, with a ceiling so a violent swipe
+// cannot fling the strip halfway round the deck.
+const FLICK_CARRY = 0.28
+const FLICK_MAX = 1400
 
 // Each card gets one of these angles, picked by its position. Fixed list, so
 // the server and the browser lay out the same row.
@@ -67,14 +74,14 @@ export default function PortfolioCarousel() {
   
   // Modal state
   const [modalOpen, setModalOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<string>('')
-  
-  // Touch/Drag state
-  const [isDragging, setIsDragging] = useState(false)
-  const [hasDragged, setHasDragged] = useState(false)
-  const [startX, setStartX] = useState(0)
-  const [currentX, setCurrentX] = useState(0)
-  const [dragOffset, setDragOffset] = useState(0)
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  // The drag lives in refs, not in state. The strip's position is written
+  // frame by frame from a loop that has to keep running, and a state update
+  // per pointer move tore that loop down and rebuilt it on every pixel of the
+  // drag - which is why dragging did nothing on a phone.
+  const dragging = useRef(false)
+  const dragOffset = useRef(0)
   const carouselRef = useRef<HTMLDivElement>(null)
 
   // Distance from one card to the next. Measured rather than assumed, because
@@ -295,7 +302,7 @@ export default function PortfolioCarousel() {
     const tick = (now: number) => {
       if (previous) {
         const elapsed = Math.min(0.05, (now - previous) / 1000)
-        if (!isHovered && !isDragging) offset.current -= DRIFT * elapsed
+        if (!isHovered && !dragging.current) offset.current -= DRIFT * elapsed
 
         // Pay off part of any arrow nudge, so it slides rather than snaps.
         if (pending.current) {
@@ -310,87 +317,51 @@ export default function PortfolioCarousel() {
       if (offset.current <= -lap) offset.current += lap
       if (offset.current > 0) offset.current -= lap
 
-      track.style.transform = `translateX(${(offset.current + dragOffset).toFixed(2)}px)`
+      track.style.transform = `translateX(${(offset.current + dragOffset.current).toFixed(2)}px)`
       frame = window.requestAnimationFrame(tick)
     }
 
     frame = window.requestAnimationFrame(tick)
     return () => window.cancelAnimationFrame(frame)
-  }, [cardsLanding, step, portfolioImages.length, isHovered, isDragging, dragOffset])
+  }, [cardsLanding, step, portfolioImages.length, isHovered])
 
-  // Touch/Mouse drag handlers
-  const handleDragStart = (clientX: number) => {
-    setIsDragging(true)
-    setHasDragged(false) // Reset on start
-    setStartX(clientX)
-    setCurrentX(clientX)
-  }
+  const { dragged, handlers: dragHandlers } = useHorizontalDrag({
+    onStart: () => {
+      dragging.current = true
+      // Any arrow nudge still gliding is dropped: the finger is in charge now.
+      pending.current = 0
+    },
+    onMove: (dx) => {
+      dragOffset.current = dx
+    },
+    onEnd: (dx, velocity) => {
+      dragging.current = false
 
-  const handleDragMove = (clientX: number) => {
-    if (!isDragging) return
-    setCurrentX(clientX)
-    const diff = clientX - startX
-    setDragOffset(diff)
-    
-    // Mark as dragged if moved more than 5px
-    if (Math.abs(diff) > 5) {
-      setHasDragged(true)
-    }
-  }
+      // Folded into the strip's own position and zeroed, or the strip would
+      // spring back to where the drag started.
+      offset.current += dx
+      dragOffset.current = 0
 
-  const handleDragEnd = () => {
-    if (!isDragging) return
-
-    setIsDragging(false)
-
-    // Fold the drag into the strip's own position and zero it, or the strip
-    // would spring back to where the drag started.
-    offset.current += dragOffset
-    setDragOffset(0)
-    setTimeout(() => setHasDragged(false), 100)
-  }
-
-  // Mouse events
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault()
-    handleDragStart(e.clientX)
-  }
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    handleDragMove(e.clientX)
-  }
-
-  const handleMouseUp = () => {
-    handleDragEnd()
-  }
-
-  const handleMouseLeave = () => {
-    if (isDragging) {
-      handleDragEnd()
-    }
-  }
-
-  // Touch events
-  const handleTouchStart = (e: React.TouchEvent) => {
-    handleDragStart(e.touches[0].clientX)
-  }
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    handleDragMove(e.touches[0].clientX)
-  }
-
-  const handleTouchEnd = () => {
-    handleDragEnd()
-  }
+      // A flick carries on. Handed to the same debt the arrows use, so it
+      // glides to a stop rather than stopping dead the moment the finger
+      // leaves the glass.
+      pending.current = Math.max(
+        -FLICK_MAX,
+        Math.min(FLICK_MAX, velocity * FLICK_CARRY)
+      )
+    },
+  })
 
   // Open image in modal
-  const handleImageClick = (imageUrl: string, e: React.MouseEvent) => {
+  const handleImageClick = (index: number, e: React.MouseEvent) => {
     e.stopPropagation()
-    
-    if (!hasDragged) {
-      setSelectedImage(imageUrl)
-      setModalOpen(true)
-    }
+
+    // A drag that finishes on a photograph is still a drag, and must not be
+    // taken for a tap on it.
+    if (dragged.current) return
+
+    setSelectedIndex(index)
+    setModalOpen(true)
   }
 
   if (loading) {
@@ -474,16 +445,13 @@ export default function PortfolioCarousel() {
 
         {/* Clipped left and right only - the arriving cards have to be free to
             come from above and below. */}
+        {/* touch-pan-y hands vertical gestures back to the browser so the page
+            still scrolls, and keeps the horizontal ones for the strip. Without
+            it the browser claims the whole gesture and no move ever arrives. */}
         <div
-          className="carousel-clip cursor-grab active:cursor-grabbing"
+          className="carousel-clip cursor-grab active:cursor-grabbing touch-pan-y"
           ref={carouselRef}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          {...dragHandlers}
         >
           {/* Position is written straight onto this element frame by frame -
               no transition, or the wrap-around would be animated and show. */}
@@ -512,7 +480,9 @@ export default function PortfolioCarousel() {
                     <div className="portfolio-media relative overflow-hidden group">
                       <div
                         className="absolute inset-0 z-10 cursor-pointer"
-                        onClick={(e) => handleImageClick(src, e)}
+                        onClick={(e) =>
+                          handleImageClick(index % portfolioImages.length, e)
+                        }
                       />
                       <Image
                         src={src}
@@ -546,8 +516,10 @@ export default function PortfolioCarousel() {
       <ImageModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
-        imageUrl={selectedImage}
-        alt="Portfolio image"
+        images={portfolioImages}
+        index={selectedIndex}
+        onIndexChange={setSelectedIndex}
+        altFor={(number) => t('imageAlt', { number })}
       />
     </section>
   )
