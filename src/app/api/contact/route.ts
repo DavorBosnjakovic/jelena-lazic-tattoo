@@ -1,12 +1,16 @@
 // jela-website/src/app/api/contact/route.ts
 
 import { NextRequest, NextResponse } from 'next/server'
-import { Resend } from 'resend'
-
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { getResendClient } from '@/lib/resend'
 
 export async function POST(request: NextRequest) {
   try {
+    // Built when the request arrives, not when the module loads. At module
+    // scope the client is constructed while the site is being built, and a
+    // deployment without the key set fails the build outright instead of
+    // just failing to send mail.
+    const resend = getResendClient()
+
     const body = await request.json()
     const { fullName, email, phone, message } = body
 
