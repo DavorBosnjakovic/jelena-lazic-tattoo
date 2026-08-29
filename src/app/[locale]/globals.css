@@ -702,7 +702,11 @@ body:has(.cta-dwell) footer {
    the same thing. */
 .reveal-up.deal-in {
   opacity: 1;
-  transform: translateX(-85vw) rotate(-8deg);
+  /* A whole screen plus the element's own width. A flat share of the viewport
+     was not enough in every case - a full width button on a phone still had
+     its tail showing - and this clears the left edge whatever the element's
+     size or place in the row. */
+  transform: translateX(calc(-100vw - 100%)) rotate(-8deg);
 }
 
 .reveal-up.deal-in.is-in {
@@ -714,7 +718,7 @@ body:has(.cta-dwell) footer {
 
 @keyframes dealIn {
   0% {
-    transform: translateX(-85vw) rotate(-8deg);
+    transform: translateX(calc(-100vw - 100%)) rotate(-8deg);
   }
   /* Arrives just past home and knocks back into it. */
   64% {

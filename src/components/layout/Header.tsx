@@ -41,7 +41,21 @@ export default function Header() {
     const header = headerRef.current
     if (!header) return
 
-    const parts = Array.from(header.querySelectorAll<HTMLElement>('[data-rise]'))
+    // Only what is actually on screen counts towards the stagger. Counting
+    // the hidden ones too meant that on a phone, where the four nav links are
+    // not rendered, the logo was first and the menu button seventh - six steps
+    // apart, for two things sitting side by side.
+    // Whether the element takes up any space at all, rather than what its own
+    // `display` says. The four nav links sit inside a container that is hidden
+    // on a phone, and asking each link reports the link's own display, not its
+    // parent's - so all six counted, and the menu button ended up six steps
+    // behind a logo standing right next to it.
+    const visible = () =>
+      Array.from(header.querySelectorAll<HTMLElement>('[data-rise]')).filter(
+        (part) => part.getClientRects().length > 0
+      )
+
+    let parts = visible()
 
     const clear = () => {
       header.style.backgroundColor = ''
@@ -64,6 +78,7 @@ export default function Header() {
 
     const assemble = () => {
       const viewport = window.innerHeight
+      if (parts.length === 0) parts = visible()
       const progress = clamp(window.scrollY / (viewport * 0.45))
 
       // The bar itself only darkens once its contents are on their way, so an
@@ -98,10 +113,14 @@ export default function Header() {
 
     assemble()
     window.addEventListener('scroll', assemble, { passive: true })
-    window.addEventListener('resize', assemble, { passive: true })
+    const onResize = () => {
+      parts = visible()
+      assemble()
+    }
+    window.addEventListener('resize', onResize, { passive: true })
     return () => {
       window.removeEventListener('scroll', assemble)
-      window.removeEventListener('resize', assemble)
+      window.removeEventListener('resize', onResize)
       clear()
     }
   }, [overHero])

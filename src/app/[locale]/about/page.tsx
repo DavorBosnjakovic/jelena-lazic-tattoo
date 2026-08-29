@@ -69,44 +69,52 @@ export default async function AboutPage({
               one thing on this page that did not belong to it. A title, the
               same brush stroke as the heading, and the words. */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-x-14 gap-y-14 mb-16">
-              <div className="reveal-up">
-                <h3 className="text-2xl font-heading mb-3 text-accent">{t('educationTitle')}</h3>
-                <span aria-hidden="true" className="brush-rule brush-rule-sm mb-5 w-28" />
-                <p className="text-foreground/90 font-body leading-relaxed">
-                  {t('educationText')}
-                </p>
-              </div>
-
-              <div className="reveal-up">
-                <h3 className="text-2xl font-heading mb-3 text-accent">{t('experienceTitle')}</h3>
-                <span aria-hidden="true" className="brush-rule brush-rule-sm brush-rule-b mb-5 w-20" />
-                <p className="text-foreground/90 font-body leading-relaxed">
-                  {t('experienceText')}
-                </p>
-              </div>
-
-              <div className="reveal-up">
-                <h3 className="text-2xl font-heading mb-3 text-accent">{t('specialtiesTitle')}</h3>
-                <span aria-hidden="true" className="brush-rule brush-rule-sm brush-rule-c mb-5 w-32" />
-                <ul className="space-y-2 text-foreground/90 font-body">
-                  {specialties.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="reveal-up">
-                <h3 className="text-2xl font-heading mb-3 text-accent">{t('locationTitle')}</h3>
-                <span aria-hidden="true" className="brush-rule brush-rule-sm brush-rule-d mb-5 w-24" />
-                <div className="space-y-2 text-foreground/90 font-body">
-                  <p>
-                    <span className="font-semibold">{t('studioLabel')}</span><br />
-                    {t('studioValue')}
+              <div className="reveal-up step-reveal">
+                <div>
+                  <h3 className="text-2xl font-heading mb-3 text-accent">{t('educationTitle')}</h3>
+                  <span aria-hidden="true" className="brush-rule brush-rule-sm mb-5 w-28" />
+                  <p className="text-foreground/90 font-body leading-relaxed">
+                    {t('educationText')}
                   </p>
-                  <p>
-                    <span className="font-semibold">{t('hoursLabel')}</span><br />
-                    {t('hoursValue')}
+                </div>
+              </div>
+
+              <div className="reveal-up step-reveal">
+                <div>
+                  <h3 className="text-2xl font-heading mb-3 text-accent">{t('experienceTitle')}</h3>
+                  <span aria-hidden="true" className="brush-rule brush-rule-sm brush-rule-b mb-5 w-20" />
+                  <p className="text-foreground/90 font-body leading-relaxed">
+                    {t('experienceText')}
                   </p>
+                </div>
+              </div>
+
+              <div className="reveal-up step-reveal">
+                <div>
+                  <h3 className="text-2xl font-heading mb-3 text-accent">{t('specialtiesTitle')}</h3>
+                  <span aria-hidden="true" className="brush-rule brush-rule-sm brush-rule-c mb-5 w-32" />
+                  <ul className="space-y-2 text-foreground/90 font-body">
+                    {specialties.map((item) => (
+                      <li key={item}>{item}</li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+
+              <div className="reveal-up step-reveal">
+                <div>
+                  <h3 className="text-2xl font-heading mb-3 text-accent">{t('locationTitle')}</h3>
+                  <span aria-hidden="true" className="brush-rule brush-rule-sm brush-rule-d mb-5 w-24" />
+                  <div className="space-y-2 text-foreground/90 font-body">
+                    <p>
+                      <span className="font-semibold">{t('studioLabel')}</span><br />
+                      {t('studioValue')}
+                    </p>
+                    <p>
+                      <span className="font-semibold">{t('hoursLabel')}</span><br />
+                      {t('hoursValue')}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
