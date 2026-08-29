@@ -2,6 +2,8 @@
 
 'use client'
 
+import type { CSSProperties } from 'react'
+
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useTranslations } from 'next-intl'
@@ -61,15 +63,15 @@ export default function ContactForm() {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       {/* Full Name */}
-      <div>
-        <label htmlFor="fullName" className="block text-sm font-body font-semibold mb-2">
-          {t('nameLabel')} <span className="text-accent">*</span>
+      <div className="reveal-up form-row" style={{ '--i': 0 } as CSSProperties}>
+        <label htmlFor="fullName" className="form-label block text-sm font-body font-semibold mb-2"><span>
+          {t('nameLabel')} <span className="text-accent">*</span></span>
         </label>
         <input
           id="fullName"
           type="text"
           {...register('fullName', { required: t('nameRequired') })}
-          className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
+          className={`form-field w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.fullName ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('namePlaceholder')}
@@ -80,9 +82,9 @@ export default function ContactForm() {
       </div>
 
       {/* Email */}
-      <div>
-        <label htmlFor="email" className="block text-sm font-body font-semibold mb-2">
-          {t('emailLabel')} <span className="text-accent">*</span>
+      <div className="reveal-up form-row" style={{ '--i': 1 } as CSSProperties}>
+        <label htmlFor="email" className="form-label block text-sm font-body font-semibold mb-2"><span>
+          {t('emailLabel')} <span className="text-accent">*</span></span>
         </label>
         <input
           id="email"
@@ -94,7 +96,7 @@ export default function ContactForm() {
               message: t('emailInvalid'),
             },
           })}
-          className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
+          className={`form-field w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.email ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('emailPlaceholder')}
@@ -105,23 +107,23 @@ export default function ContactForm() {
       </div>
 
       {/* Phone */}
-      <div>
-        <label htmlFor="phone" className="block text-sm font-body font-semibold mb-2">
-          {t('phoneLabel')} <span className="text-foreground/50">{t('phoneOptional')}</span>
+      <div className="reveal-up form-row" style={{ '--i': 2 } as CSSProperties}>
+        <label htmlFor="phone" className="form-label block text-sm font-body font-semibold mb-2"><span>
+          {t('phoneLabel')} <span className="text-foreground/50">{t('phoneOptional')}</span></span>
         </label>
         <input
           id="phone"
           type="tel"
           {...register('phone')}
-          className="w-full px-4 py-3 rounded-md border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
+          className="form-field w-full px-4 py-3 rounded-md border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
           placeholder={t('phonePlaceholder')}
         />
       </div>
 
       {/* Message */}
-      <div>
-        <label htmlFor="message" className="block text-sm font-body font-semibold mb-2">
-          {t('messageLabel')} <span className="text-accent">*</span>
+      <div className="reveal-up form-row" style={{ '--i': 3 } as CSSProperties}>
+        <label htmlFor="message" className="form-label block text-sm font-body font-semibold mb-2"><span>
+          {t('messageLabel')} <span className="text-accent">*</span></span>
         </label>
         <textarea
           id="message"
@@ -133,7 +135,7 @@ export default function ContactForm() {
               message: t('messageMin'),
             },
           })}
-          className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none ${
+          className={`form-field w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none ${
             errors.message ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('messagePlaceholder')}
@@ -147,7 +149,8 @@ export default function ContactForm() {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full px-6 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+        className="reveal-up deal-in btn btn-block"
+        style={{ '--i': 4 } as CSSProperties}
       >
         {status === 'loading' ? t('sending') : t('send')}
       </button>

@@ -25,7 +25,7 @@ export default function Footer() {
   const tNav = useTranslations('nav')
 
   return (
-    <footer className="bg-background text-foreground border-t border-border py-16">
+    <footer className="bg-background text-foreground border-t border-border pt-14 pb-8">
       <div className="container mx-auto px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
@@ -62,7 +62,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="mt-10 pt-5 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-sm text-foreground/70">
             {t('rights', { year: new Date().getFullYear() })}
           </p>

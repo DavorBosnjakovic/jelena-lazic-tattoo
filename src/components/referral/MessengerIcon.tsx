@@ -13,7 +13,7 @@ const MESSENGER_ICON_PATHS: Record<string, string> = {
 
 export default function MessengerIcon({ name }: { name: string }) {
   return (
-    <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor" aria-hidden="true">
+    <svg viewBox="0 0 24 24" className="icon-glow w-[22px] h-[22px]" fill="currentColor" aria-hidden="true">
       <path d={MESSENGER_ICON_PATHS[name]} />
     </svg>
   )

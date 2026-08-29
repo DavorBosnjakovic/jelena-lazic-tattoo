@@ -19,8 +19,8 @@ const config: Config = {
         hover: 'rgb(var(--color-hover) / <alpha-value>)',
       },
       fontFamily: {
-        heading: ['var(--font-heading)', 'Georgia', 'serif'],
-        nav: ['var(--font-nav)', 'system-ui', 'sans-serif'],
+        heading: ['var(--font-heading)', 'system-ui', 'sans-serif'],
+        nav: ['var(--font-body)', 'system-ui', 'sans-serif'],
         body: ['var(--font-body)', 'system-ui', '-apple-system', 'sans-serif'],
       },
       fontSize: {

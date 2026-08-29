@@ -12,13 +12,13 @@ export default function NotFound() {
         <div className="max-w-2xl mx-auto text-center">
           {/* 404 Illustration */}
           <div className="mb-8">
-            <h1 className="text-9xl md:text-[12rem] font-heading font-bold text-accent/20">
+            <h1 className="text-9xl md:text-[12rem] font-heading text-accent/20">
               {t('code')}
             </h1>
           </div>
 
           {/* Error Message */}
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-6">
+          <h2 className="text-4xl md:text-5xl font-heading mb-6">
             {t('title')}
           </h2>
 
@@ -52,7 +52,7 @@ export default function NotFound() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/"
-                className="px-8 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200"
+                className="btn"
               >
                 {t('goHome')}
               </Link>

@@ -3,30 +3,22 @@
 import { ButtonHTMLAttributes, forwardRef } from 'react'
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline'
   size?: 'sm' | 'md' | 'lg'
+  block?: boolean
 }
 
+// There is one button on this site. The look lives in the .btn class in
+// globals.css, so a plain <button className="btn"> and this component can
+// never drift apart.
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className = '', variant = 'primary', size = 'md', children, ...props }, ref) => {
-    const baseStyles = 'font-nav font-semibold rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100'
-    
-    const variantStyles = {
-      primary: 'bg-accent text-white hover:bg-accent/90 hover:scale-102',
-      secondary: 'bg-foreground text-background hover:bg-foreground/90 hover:scale-102',
-      outline: 'border-2 border-accent text-accent hover:bg-accent hover:text-white hover:scale-102',
-    }
-    
-    const sizeStyles = {
-      sm: 'px-4 py-2 text-sm',
-      md: 'px-6 py-3 text-base',
-      lg: 'px-8 py-4 text-lg',
-    }
+  ({ className = '', size = 'md', block = false, children, ...props }, ref) => {
+    const sizeClass = size === 'sm' ? ' btn-sm' : size === 'lg' ? ' btn-lg' : ''
+    const blockClass = block ? ' btn-block' : ''
 
     return (
       <button
         ref={ref}
-        className={`${baseStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+        className={`btn${sizeClass}${blockClass}${className ? ' ' + className : ''}`}
         {...props}
       >
         {children}

@@ -36,13 +36,13 @@ export default function ShareLink({ url }: { url: string }) {
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <button
           onClick={share}
-          className="px-6 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 transition-all duration-200"
+          className="btn"
         >
           {t('shareButton')}
         </button>
         <button
           onClick={copy}
-          className="px-6 py-3 border-2 border-border font-nav font-semibold rounded-md hover:border-accent transition-all duration-200"
+          className="btn"
         >
           {copied ? t('copied') : t('copyLink')}
         </button>

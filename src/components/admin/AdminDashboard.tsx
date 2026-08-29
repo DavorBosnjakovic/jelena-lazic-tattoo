@@ -102,7 +102,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <header className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border">
         <div className="max-w-lg mx-auto px-4 py-4 flex items-center justify-between">
-          <h1 className="text-2xl font-heading font-bold">
+          <h1 className="text-2xl font-heading">
             Referal <span className="text-accent">program</span>
           </h1>
           <button
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
       {/* New code button */}
       <button
         onClick={() => setShowNewForm(true)}
-        className="fixed bottom-6 right-6 px-6 py-4 bg-accent text-white font-nav font-bold text-lg rounded-full shadow-lg hover:bg-accent/90 transition-all"
+        className="btn fixed bottom-6 right-6"
       >
         + Novi kod
       </button>
@@ -229,7 +229,7 @@ function LoginScreen() {
   return (
     <Centered>
       <form onSubmit={login} className="w-full max-w-sm space-y-4">
-        <h1 className="text-3xl font-heading font-bold text-center mb-8">
+        <h1 className="text-3xl font-heading text-center mb-8">
           Jelena <span className="text-accent">Admin</span>
         </h1>
         <input
@@ -254,7 +254,7 @@ function LoginScreen() {
         <button
           type="submit"
           disabled={busy}
-          className="w-full px-6 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 disabled:opacity-50"
+          className="btn btn-block"
         >
           {busy ? 'Prijavljivanje...' : 'Prijavi se'}
         </button>
@@ -403,7 +403,7 @@ function PendingCard({
             <button
               onClick={complete}
               disabled={busy}
-              className="flex-1 px-4 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 disabled:opacity-50"
+              className="btn flex-1"
             >
               {busy ? 'Čuvanje...' : 'Potvrdi'}
             </button>
@@ -420,7 +420,7 @@ function PendingCard({
         <div className="flex gap-2">
           <button
             onClick={() => setCompleting(true)}
-            className="flex-1 px-4 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90"
+            className="btn flex-1"
           >
             Tetovaža obavljena
           </button>
@@ -594,7 +594,7 @@ function ClientCard({
             <button
               onClick={redeem}
               disabled={busy}
-              className="w-full px-4 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 disabled:opacity-50"
+              className="btn btn-block"
             >
               {busy ? 'Čuvanje...' : `Saldo iskorišćen (${formatEur(balance)})`}
             </button>
@@ -602,7 +602,7 @@ function ClientCard({
 
           <button
             onClick={copyLanding}
-            className="w-full px-4 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent"
+            className="btn btn-block"
           >
             Kopiraj link za deljenje
           </button>
@@ -610,7 +610,7 @@ function ClientCard({
           <button
             onClick={addManual}
             disabled={busy}
-            className="w-full px-4 py-3 border-2 border-border rounded-md font-nav font-semibold hover:border-accent disabled:opacity-50"
+            className="btn btn-block"
           >
             + Dodaj prijavu ručno
           </button>
@@ -684,7 +684,7 @@ function NewReferrerModal({
         onClick={(e) => e.stopPropagation()}
         className="w-full max-w-sm bg-background border border-border rounded-lg p-6 space-y-4"
       >
-        <h2 className="text-xl font-heading font-bold">Novi kod za klijenta</h2>
+        <h2 className="text-xl font-heading">Novi kod za klijenta</h2>
         <input
           type="text"
           value={name}
@@ -710,7 +710,7 @@ function NewReferrerModal({
           <button
             type="submit"
             disabled={busy}
-            className="flex-1 px-4 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 disabled:opacity-50"
+            className="btn flex-1"
           >
             {busy ? 'Kreiranje...' : 'Kreiraj i pošalji'}
           </button>

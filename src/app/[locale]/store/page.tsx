@@ -35,7 +35,7 @@ export default async function StorePage({
       <div className="container mx-auto px-6 lg:px-8">
         {/* Page Title */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-heading font-bold mb-4">
+          <h1 className="text-5xl md:text-6xl font-heading mb-4">
             {t('title')}
           </h1>
           <div className="w-24 h-1 bg-accent mx-auto" />
@@ -61,7 +61,7 @@ export default async function StorePage({
               </svg>
             </div>
 
-            <h2 className="text-3xl md:text-4xl font-heading font-bold mb-6">
+            <h2 className="text-3xl md:text-4xl font-heading mb-6">
               {t('comingSoon')}
             </h2>
 
@@ -74,7 +74,7 @@ export default async function StorePage({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
             {features.map((feature) => (
               <div key={feature.title} className="p-6 bg-foreground/5 rounded-xl border border-border">
-                <h3 className="text-xl font-heading font-semibold mb-3 text-accent">
+                <h3 className="text-xl font-heading mb-3 text-accent">
                   {feature.title}
                 </h3>
                 <p className="text-foreground/80 font-body">
@@ -86,7 +86,7 @@ export default async function StorePage({
 
           {/* Follow CTA */}
           <div className="p-8 bg-accent/5 rounded-xl border border-accent/20">
-            <h3 className="text-2xl font-heading font-bold mb-4">
+            <h3 className="text-2xl font-heading mb-4">
               {t('followTitle')}
             </h3>
             <p className="text-foreground/80 mb-6">
@@ -96,7 +96,7 @@ export default async function StorePage({
               href="https://www.instagram.com/jelena_lazic_tattoo"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block px-8 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200"
+              className="btn inline-block"
             >
               {t('followBtn')}
             </Link>
@@ -116,7 +116,7 @@ export default async function StorePage({
               </Link>
               <Link
                 href="/contact"
-                className="px-8 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200"
+                className="btn"
               >
                 {t('contactMe')}
               </Link>

@@ -1,25 +1,21 @@
 import type { Metadata } from 'next'
+import { Kanit } from 'next/font/google'
 import localFont from 'next/font/local'
 import { notFound } from 'next/navigation'
 import { NextIntlClientProvider, hasLocale } from 'next-intl'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import './globals.css'
 import Header from '@/components/layout/Header'
+import SmoothScroll from '@/components/layout/SmoothScroll'
 import Footer from '@/components/layout/Footer'
 import { ThemeProvider } from '@/components/layout/ThemeProvider'
 import { routing } from '@/i18n/routing'
 
-// FreedoomedDemo - Headings and logo
-const freedoomed = localFont({
-  src: '../../../public/fonts/FreedoomedDemo.woff2',
+// Kanit - headings, buttons, and the question the intro opens with.
+const kanit = Kanit({
+  subsets: ['latin', 'latin-ext'],
+  weight: ['400', '500', '600'],
   variable: '--font-heading',
-  display: 'swap',
-})
-
-// Agency - Navigation
-const agency = localFont({
-  src: '../../../public/fonts/Agency.woff2',
-  variable: '--font-nav',
   display: 'swap',
 })
 
@@ -113,7 +109,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale} suppressHydrationWarning>
-      <body className={`${freedoomed.variable} ${agency.variable} ${montserrat.variable}`}>
+      <body className={`${kanit.variable} ${montserrat.variable}`}>
         {/* Set theme before paint to avoid a flash. Default is dark unless the user picked light. */}
         <script
           dangerouslySetInnerHTML={{
@@ -122,6 +118,7 @@ export default async function LocaleLayout({
         />
         <NextIntlClientProvider>
           <ThemeProvider>
+            <SmoothScroll />
             <Header />
             <main className="min-h-screen">
               {children}

@@ -11,7 +11,7 @@ export default function PrivacyPage() {
       <div className="container mx-auto px-6 lg:px-8">
         {/* Page Title */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl md:text-6xl font-heading font-bold mb-4">
+          <h1 className="text-5xl md:text-6xl font-heading mb-4">
             Privacy Policy
           </h1>
           <p className="text-foreground/70">
@@ -21,7 +21,7 @@ export default function PrivacyPage() {
         </div>
 
         {/* Content */}
-        <div className="max-w-4xl mx-auto prose prose-lg prose-headings:font-heading prose-headings:font-bold prose-h2:text-3xl prose-h3:text-2xl prose-p:text-foreground/90 prose-p:font-body prose-ul:font-body prose-a:text-accent hover:prose-a:text-accent/80">
+        <div className="max-w-4xl mx-auto prose prose-lg prose-headings:font-heading prose-h2:text-3xl prose-h3:text-2xl prose-p:text-foreground/90 prose-p:font-body prose-ul:font-body prose-a:text-accent hover:prose-a:text-accent/80">
           
           <section className="mb-12">
             <h2>Introduction</h2>

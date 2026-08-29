@@ -25,9 +25,8 @@
     @apply border-border;
   }
 
-  html {
-    @apply scroll-smooth;
-  }
+  /* No scroll-smooth here - Lenis animates the scroll itself, and the two
+     of them pulling at the same position stutter against each other. */
 
   body {
     @apply bg-background text-foreground font-body antialiased;
@@ -35,30 +34,211 @@
 
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading;
+    /* Kanit is a narrow face and sets loose by default; at heading sizes the
+       gaps between letters read as gaps between words. */
+    letter-spacing: -0.025em;
+  }
+
+  /* The bigger the type, the more the tracking shows - so the largest sizes
+     are pulled in further. */
+  h1, h2 {
+    letter-spacing: -0.035em;
   }
 
   h1 {
-    @apply text-5xl md:text-6xl font-bold;
+    @apply text-5xl md:text-6xl font-medium;
   }
 
   h2 {
-    @apply text-4xl md:text-5xl font-bold;
+    @apply text-4xl md:text-5xl font-medium;
   }
 
   h3 {
-    @apply text-3xl md:text-4xl font-bold;
+    @apply text-3xl md:text-4xl font-medium;
   }
 
   h4 {
-    @apply text-2xl md:text-3xl font-semibold;
+    @apply text-2xl md:text-3xl font-medium;
   }
 
   h5 {
-    @apply text-xl md:text-2xl font-semibold;
+    @apply text-xl md:text-2xl font-medium;
   }
 
   h6 {
-    @apply text-lg md:text-xl font-semibold;
+    @apply text-lg md:text-xl font-medium;
+  }
+}
+
+@layer components {
+  /* The one button on the site. Struck rather than drawn: a lit top edge, a
+     shaded bottom one and a shadow underneath give it thickness, and the
+     accent carries the colour and the glow. On press the lighting inverts and
+     it sinks - that is the part that makes it feel like a real switch.
+     Set in the heading serif, a display face, so it takes a little more size
+     and letter spacing than a button normally would. */
+  .btn {
+    --btn-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 2rem;
+    border: 1px solid rgb(var(--color-accent) / 0.75);
+    border-radius: var(--btn-radius);
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-accent) / 0.26),
+      rgb(var(--color-accent) / 0.1)
+    );
+    color: rgb(var(--color-foreground));
+    font-family: var(--font-heading), system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 1.1rem;
+    letter-spacing: 0.045em;
+    line-height: 1.25;
+    text-align: center;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.55);
+    cursor: pointer;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.16),
+      inset 0 -1px 0 rgb(0 0 0 / 0.5),
+      0 1px 3px rgb(0 0 0 / 0.5),
+      0 0 10px rgb(var(--color-accent) / 0.18);
+    transition:
+      background-image 220ms ease,
+      color 220ms ease,
+      box-shadow 240ms ease,
+      transform 120ms ease;
+  }
+
+  .btn:hover {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-accent)),
+      rgb(var(--color-accent) / 0.78)
+    );
+    border-color: rgb(var(--color-accent));
+    color: #fff;
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.3),
+      inset 0 -1px 0 rgb(0 0 0 / 0.4),
+      0 2px 6px rgb(0 0 0 / 0.55),
+      0 0 22px rgb(var(--color-accent) / 0.6),
+      0 0 48px rgb(var(--color-accent) / 0.3);
+  }
+
+  /* Pressed: the light moves to the bottom edge and the face sinks. */
+  .btn:active {
+    transform: translateY(1px);
+    text-shadow: none;
+    box-shadow:
+      inset 0 2px 5px rgb(0 0 0 / 0.6),
+      inset 0 -1px 0 rgb(255 255 255 / 0.1),
+      0 0 16px rgb(var(--color-accent) / 0.45);
+  }
+
+  .btn:focus-visible {
+    outline: 2px solid rgb(var(--color-accent));
+    outline-offset: 3px;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled='true'] {
+    opacity: 0.45;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  /* The quiet sibling. Same block, same lighting, colour held back until
+     hover, so a pair still reads as one family with an obvious lead. */
+  .btn-ghost {
+    border-color: rgb(var(--color-foreground) / 0.28);
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-foreground) / 0.09),
+      rgb(var(--color-foreground) / 0.03)
+    );
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.12),
+      inset 0 -1px 0 rgb(0 0 0 / 0.45),
+      0 1px 3px rgb(0 0 0 / 0.45);
+  }
+
+  .btn-ghost:hover {
+    border-color: rgb(var(--color-accent));
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-accent) / 0.3),
+      rgb(var(--color-accent) / 0.12)
+    );
+    color: rgb(var(--color-foreground));
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.2),
+      inset 0 -1px 0 rgb(0 0 0 / 0.45),
+      0 2px 6px rgb(0 0 0 / 0.5),
+      0 0 18px rgb(var(--color-accent) / 0.4);
+  }
+
+  /* Light mode needs a different recipe, not a different number. The fill is
+     the accent at low alpha, which over near black reads as a deep red and
+     over near white as pink - washed out, whatever the figure. Here the fill
+     is genuinely red, just short of full strength, so hover still has
+     somewhere to go, and the label turns white to sit on it. */
+  html:not(.dark) .btn {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-accent) / 0.92),
+      rgb(var(--color-accent) / 0.76)
+    );
+    border-color: rgb(var(--color-accent));
+    color: #fff;
+    text-shadow: 0 1px 0 rgb(0 0 0 / 0.35);
+  }
+
+  html:not(.dark) .btn:hover {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-accent)),
+      rgb(var(--color-accent) / 0.88)
+    );
+  }
+
+  /* The quiet one stays quiet - on a light page it is already legible. */
+  html:not(.dark) .btn-ghost {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-foreground) / 0.07),
+      rgb(var(--color-foreground) / 0.02)
+    );
+    border-color: rgb(var(--color-foreground) / 0.3);
+    color: rgb(var(--color-foreground));
+    text-shadow: none;
+  }
+
+  html:not(.dark) .btn-ghost:hover {
+    background-image: linear-gradient(
+      180deg,
+      rgb(var(--color-accent)),
+      rgb(var(--color-accent) / 0.88)
+    );
+    border-color: rgb(var(--color-accent));
+    color: #fff;
+  }
+
+  .btn-sm {
+    padding: 0.5rem 1.35rem;
+    font-size: 1rem;
+  }
+
+  .btn-lg {
+    padding: 0.95rem 2.6rem;
+    font-size: 1.35rem;
+  }
+
+  .btn-block {
+    display: flex;
+    width: 100%;
   }
 }
 
@@ -82,29 +262,50 @@
   .icon-glow:hover,
   .group:hover .icon-glow {
     color: rgb(var(--color-accent));
-    filter: drop-shadow(0 0 6px rgb(var(--color-accent) / 0.55));
+    /* Grows and lights up, the same move the buttons make. Two layers of
+       glow rather than one, so the light has some depth to it. */
+    transform: scale(1.18);
+    filter: drop-shadow(0 0 8px rgb(var(--color-accent) / 0.6))
+      drop-shadow(0 0 20px rgb(var(--color-accent) / 0.35));
   }
 
+  /* The social icons are masks - a filled box with the shape punched out of
+     it - and a mask is applied after the filter. The glow is worked out
+     around the whole box and then cut away with everything else outside the
+     shape, so the icon grows and reddens but never lights up. The parent is
+     not masked, so it carries the glow instead. */
+  .group:has(.icon-mask):hover {
+    filter: drop-shadow(0 0 8px rgb(var(--color-accent) / 0.6))
+      drop-shadow(0 0 20px rgb(var(--color-accent) / 0.35));
+  }
+
+  .group:hover .icon-mask.icon-glow {
+    filter: none;
+  }
+
+  /* Quiet and square. A rounded red thumb sits in the top right corner of the
+     hero and reads as a hole punched in it. */
   ::-webkit-scrollbar {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
   }
 
   ::-webkit-scrollbar-track {
-    @apply bg-background;
+    background: rgb(var(--color-background));
   }
 
   ::-webkit-scrollbar-thumb {
-    @apply bg-accent/30 rounded-full;
+    background: rgb(var(--color-foreground) / 0.16);
+    border-radius: 0;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    @apply bg-accent/50;
+    background: rgb(var(--color-foreground) / 0.3);
   }
 
   * {
     scrollbar-width: thin;
-    scrollbar-color: rgba(139, 0, 0, 0.3) transparent;
+    scrollbar-color: rgb(var(--color-foreground) / 0.16) rgb(var(--color-background));
   }
 }
 
@@ -136,6 +337,790 @@
   to {
     transform: scale(1);
     opacity: 1;
+  }
+}
+
+/* ---- Hero intro ----------------------------------------------------------
+   Plays once per session over the hero: a beat of darkness, then the
+   question is uncovered, and then it hands straight over to the logo. Was
+   HELL YEAH!!! comes at the viewer from off-screen-close, tilted to match
+   the columns behind it, and the screen takes the hit.
+   Sits inset past the edges so the shake never uncovers a border. */
+
+.hero-intro {
+  position: fixed;
+  inset: -48px;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  background: rgb(var(--color-background));
+  overflow: hidden;
+}
+
+/* No-JS failsafe: if the script never runs, the cover still gets out of
+   the way instead of hiding the site forever. */
+.hero-intro-hold {
+  animation: introFailsafe 0.4s linear 7s both;
+}
+
+.hero-intro-playing {
+  animation: introOutro 0.55s ease-in 2.6s both;
+}
+
+.hero-intro-word {
+  grid-area: 1 / 1;
+  font-family: var(--font-heading), system-ui, sans-serif;
+  color: rgb(var(--color-foreground));
+  text-align: center;
+  line-height: 1;
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+
+/* First word: deliberately about half the width of the answer - the question
+   is tentative, the answer is not. Already set, uncovered by a soft edge
+   travelling across it at the same angle as everything else.
+   The mask is 250% wide, so the element only ever sees 40% of it. The fade
+   therefore has to live between 40% and 60% - any wider and the word is
+   already part-visible before the sweep starts. */
+.hero-intro-question {
+  /* Kanit is already narrow; at this size the default gaps between letters
+     read as loose, so they are pulled in. */
+  letter-spacing: -0.03em;
+  /* Sized so the question lands at about half the screen, the same restraint
+     it had when it was one word - the longer text needs a smaller size to
+     keep that proportion against the answer. */
+  font-size: 10.5vw;
+  -webkit-mask-image: linear-gradient(96deg, #000 0%, #000 40%, transparent 52%, transparent 100%);
+  mask-image: linear-gradient(96deg, #000 0%, #000 40%, transparent 52%, transparent 100%);
+  -webkit-mask-size: 250% 100%;
+  mask-size: 250% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  animation:
+    introWipe 1.15s cubic-bezier(0.22, 0.61, 0.36, 1) 0.9s both,
+    introQuestionOut 0.18s ease-in 2.6s both;
+}
+
+@keyframes introWipe {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  to {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+}
+
+@keyframes introWipe {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+  to {
+    -webkit-mask-position: 0% 0;
+    mask-position: 0% 0;
+  }
+}
+
+@keyframes introQuestionOut {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes introOutro {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes introFailsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+/* ---- Portfolio carousel --------------------------------------------------
+   The track has to contain the slides waiting to the left and right, but must
+   NOT clip vertically, or the cards arriving from above and below get cut in
+   half. `overflow: hidden` forces the other axis to scroll, and a clip-path
+   only hides paint - the 123-card track still widens the page. `clip` is the
+   one that does both: contained across, open up and down. */
+.carousel-clip {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+@supports not (overflow: clip) {
+  .carousel-clip {
+    overflow: hidden;
+  }
+}
+
+/* Holds under the header while the next panel scrolls up over it. The header
+   is a fixed 80px, so this needs no measuring and is in force from the first
+   paint. `is-unpinned` takes it back off when a section turns out too tall
+   for the space, which only JavaScript can tell.
+   Position is set here and nowhere else - a `position: relative` on one of
+   the sections below would quietly win on source order and nothing would
+   hold at all. */
+.section-pin {
+  position: sticky;
+  top: 5rem;
+}
+
+.section-pin.is-unpinned {
+  position: relative;
+  top: auto;
+}
+
+.portfolio-section {
+  z-index: 1;
+  /* The lines of copy slide in from well outside the page; contained across,
+     open downwards so the cards can still rise from below the fold. */
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* Stacked above the section it climbs over, so what it covers is covered. */
+.cta-section {
+  z-index: 2;
+}
+
+/* Breathing room so the pinned portfolio actually holds for a while before
+   this panel climbs over it. The gap is never seen - the pinned section fills
+   the screen through all of it. Only added when it really is pinned. */
+.portfolio-section:not(.is-unpinned) + .cta-section {
+  margin-top: 60vh;
+}
+
+/* The closing panel holds under the header like the others, and the footer
+   rides up over it. A sticky element only holds while its parent has room
+   below it, and this is the last thing in <main> - so the spacer provides
+   exactly the footer's height, and the footer is pulled up by the same
+   amount to fill it. Nothing empty is ever left over.
+   --footer-h is set from the measured footer. With no value the spacer is
+   zero and the page simply ends: a missing measurement costs the pin, never
+   leaves a hole. */
+.cta-dwell {
+  height: var(--footer-h, 0px);
+}
+
+body:has(.cta-dwell) footer {
+  position: relative;
+  z-index: 3;
+  margin-top: calc(var(--footer-h, 0px) * -1);
+}
+
+/* A hand drawn stroke rather than a ruled line - thick through the middle,
+   tapering at both ends, and never quite straight. Carried as a mask so the
+   colour comes from the accent token and follows the theme. It draws itself
+   from the left. */
+.brush-rule {
+  display: block;
+  height: 0.7rem;
+  background-color: rgb(var(--color-accent));
+  -webkit-mask: no-repeat center / 100% 100%
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M4 13.5C92 4.5 214 2 316 7.5C212 11 94 13.5 4 18.5Z' fill='%23000'/%3E%3C/svg%3E");
+  mask: no-repeat center / 100% 100%
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M4 13.5C92 4.5 214 2 316 7.5C212 11 94 13.5 4 18.5Z' fill='%23000'/%3E%3C/svg%3E");
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 620ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.brush-rule.is-drawn {
+  transform: scaleX(1);
+}
+
+/* Thinner, for the strokes under the smaller headings. */
+.brush-rule-sm {
+  height: 0.4rem;
+}
+
+/* Four separate strokes, so no two blocks are underlined by the same mark.
+   Each is its own path - a different swell, a different lean, a different
+   way of running out at the end. */
+.brush-rule-b {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M2 7C88 2 206 5 318 3C216 12 98 15 2 17Z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M2 7C88 2 206 5 318 3C216 12 98 15 2 17Z' fill='%23000'/%3E%3C/svg%3E");
+}
+
+.brush-rule-c {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M6 11C102 17 198 3 314 8C208 14 102 12 6 17Z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M6 11C102 17 198 3 314 8C208 14 102 12 6 17Z' fill='%23000'/%3E%3C/svg%3E");
+}
+
+.brush-rule-d {
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M3 13C98 8 210 6 317 2C212 10 96 15 3 18Z' fill='%23000'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 20' preserveAspectRatio='none'%3E%3Cpath d='M3 13C98 8 210 6 317 2C212 10 96 15 3 18Z' fill='%23000'/%3E%3C/svg%3E");
+}
+
+/* A photograph in the grid: no frame, no rounding, nothing but the picture.
+   The tile itself carries only the hover - it lifts clear of its neighbours,
+   swings a little and lights up in the accent. Nothing here clips, so the
+   glow is free to spill past the edges. */
+.reveal-up.portfolio-tile {
+  cursor: pointer;
+  opacity: 1;
+  transform: none;
+  transition:
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 320ms ease;
+}
+
+/* Three classes deep on purpose. `.reveal-up.is-in` also sets a transform,
+   carries the same weight, and sits lower in this file - so a plainer hover
+   selector loses and only the glow survives. */
+.reveal-up.portfolio-tile:hover {
+  position: relative;
+  z-index: 10;
+  transform: scale(1.07) rotate(var(--hover-tilt, 2.5deg));
+  filter: drop-shadow(0 0 22px rgb(var(--color-accent) / 0.5))
+    drop-shadow(0 0 54px rgb(var(--color-accent) / 0.28));
+}
+
+/* The reveal: the frame uncovers from its bottom edge upwards while the
+   photograph inside travels the other way at roughly half the speed. The
+   picture is never moved as a whole - it is uncovered, and lags behind the
+   opening, which is what gives it depth.
+   `translate` carries the lag and `transform` the hover, so the two never
+   overwrite each other. */
+.portfolio-tile .portfolio-frame {
+  clip-path: inset(100% 0 0 0);
+}
+
+.portfolio-tile.is-in .portfolio-frame {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 720ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+
+/* Taller than the frame that holds it, so there is room to drift inside the
+   crop. Without the extra height a shift would drag a bare edge into view. */
+.portfolio-tile .portfolio-frame img {
+  height: 136%;
+  top: -18%;
+  bottom: auto;
+  translate: 0 -18%;
+  transition: translate 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  /* The scroll drift is written to `transform`; `translate` belongs to the
+     reveal, so the two never overwrite each other. */
+  will-change: transform;
+}
+
+.portfolio-tile.is-in .portfolio-frame img {
+  translate: 0 0;
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-tile:hover {
+    transform: none;
+  }
+
+  .portfolio-tile .portfolio-frame {
+    clip-path: none;
+  }
+
+  .portfolio-tile .portfolio-frame img {
+    translate: none;
+  }
+}
+
+/* The form assembles itself a row at a time. The label drops from behind the
+   top edge of its own line, the field slides in from off the left, and the
+   two arrive together - a label and its field are a pair, and sending them in
+   separately reads as the form coming apart rather than being built. */
+.form-row {
+  opacity: 1;
+  transform: none;
+  /* The label below pulls its box 130px upwards, and the row's own box goes
+     with it - straight over the field above. Transparent, but it was taking
+     that field's clicks. Nothing here answers the mouse except the parts that
+     should. */
+  pointer-events: none;
+}
+
+.form-row > *:not(.form-label) {
+  pointer-events: auto;
+}
+
+/* The padding is what the label falls through. Clipped to its own line the
+   drop was twenty pixels - real, but nothing beside a field crossing the whole
+   screen. The negative margin cancels the padding again, so the page does not
+   move; the box simply reaches up over what sits above it, which is why it
+   takes no clicks - only the words inside it do. */
+.form-label {
+  overflow: hidden;
+  padding-top: 130px;
+  margin-top: -130px;
+  pointer-events: none;
+}
+
+.form-label > span {
+  display: inline-block;
+  pointer-events: auto;
+  transform: translateY(-130px);
+  transition: transform 900ms cubic-bezier(0.35, 0.55, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 150ms);
+}
+
+.form-row.is-in .form-label > span {
+  transform: none;
+}
+
+.form-field {
+  transform: translateX(-110vw);
+  transition: transform 900ms cubic-bezier(0.35, 0.55, 0.2, 1);
+  transition-delay: calc(var(--i, 0) * 150ms);
+}
+
+.form-row.is-in .form-field {
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .form-label > span,
+  .form-field {
+    transform: none;
+  }
+}
+
+/* Dealt in from off to the left, one after the other, and landing with a
+   knock. Written as one animation rather than a transition, because a
+   transition can only go from A to B - it has nowhere to put the overshoot
+   and the settling wobble at the end.
+   Everything is expressed through `transform` alone: mixed with the separate
+   `translate` and `rotate` properties, the build folds them together in one
+   rule and leaves them apart in the other, and the two ends stop describing
+   the same thing. */
+.reveal-up.deal-in {
+  opacity: 1;
+  transform: translateX(-85vw) rotate(-8deg);
+}
+
+.reveal-up.deal-in.is-in {
+  animation: dealIn 1100ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  /* Its own place in the row, not the shared counter - on that one the first
+     button waited out the three cards ahead of it before setting off. */
+  animation-delay: calc(var(--i, 0) * 230ms);
+}
+
+@keyframes dealIn {
+  0% {
+    transform: translateX(-85vw) rotate(-8deg);
+  }
+  /* Arrives just past home and knocks back into it. */
+  64% {
+    transform: translateX(2.5%) rotate(1.4deg);
+  }
+  76% {
+    transform: translateX(-1.4%) rotate(-1deg);
+  }
+  86% {
+    transform: translateX(0.7%) rotate(0.5deg);
+  }
+  94% {
+    transform: translateX(-0.3%) rotate(-0.2deg);
+  }
+  100% {
+    transform: translateX(0) rotate(0deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up.deal-in,
+  .reveal-up.deal-in.is-in {
+    animation: none;
+    transform: none;
+  }
+}
+
+/* The clip belongs on the page, not on the row of buttons. On the row - which
+   is narrow and centred - the whole flight happens outside it and the buttons
+   only become visible for the last few pixels, so they appear rather than
+   arrive. Held here, the deck crosses the page in full view, and the page
+   still cannot be widened by it. */
+.deal-page {
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up.deal-in {
+    translate: none;
+    rotate: none;
+  }
+}
+
+/* The card surfaces from behind a plane that is never drawn. The plane is the
+   card's own bottom edge: the whole thing starts below it, hidden, and rises
+   up through it in one piece - so the number breaks the surface first, then
+   the title, then the words.
+   The edge itself does not move. An opening edge would uncover the card from
+   the bottom up, which puts the number in last and takes the card apart on
+   the way in. */
+.reveal-up.step-reveal {
+  opacity: 1;
+  transform: none;
+  overflow: hidden;
+}
+
+.step-reveal > * {
+  /* Full height on purpose. The grid stretches every card to the tallest in
+     the row, but this wrapper only wrapped its own words - so a percentage
+     shift was measured against the shorter of the two and left the top of the
+     number showing above the edge. Matched to the box, 100% clears it exactly. */
+  height: 100%;
+  translate: 0 100%;
+  /* Slow enough to watch, and on a gentler curve. The one used elsewhere is
+     an exponential ease-out that spends most of its travel in the first third
+     - the card would clear the edge almost at once and then creep, which hides
+     the very thing this is meant to show. */
+  transition: translate 1400ms cubic-bezier(0.35, 0.55, 0.2, 1);
+  transition-delay: calc(var(--d, 0) * 170ms);
+}
+
+.step-reveal.is-in > * {
+  translate: 0 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .step-reveal > * {
+    translate: none;
+  }
+}
+
+/* The lines inside carry their own reveal, so the paragraph itself must not
+   fade as well - two moves on the same words read as a stutter. */
+.reveal-up.split-lines {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up.step-reveal {
+    clip-path: none;
+  }
+
+  .step-reveal > * {
+    translate: none;
+  }
+}
+
+/* Each line of prose comes up from below, one after the next. The line number
+   is written onto every word by SplitLines once the browser has wrapped them,
+   and everything on the same line therefore moves together. */
+.split-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 620ms ease,
+    transform 760ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--line, 0) * 110ms);
+}
+
+.split-lines.is-in .split-word {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split-word {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* The photo comes up out of nothing, and is cropped in by a few pixels on
+   every side - the supplied file has a pale edge along the top from the way
+   it was cut. */
+/* Both classes in the selector on purpose: the photo also carries
+   .reveal-up, whose own shorter transition would otherwise win on source
+   order and the slow fade would never happen. No rise either - it only
+   fades. */
+.reveal-up.about-photo {
+  overflow: hidden;
+  opacity: 0;
+  transform: none;
+  transition: opacity 1800ms ease;
+}
+
+.reveal-up.about-photo.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+.about-photo img {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up.about-photo {
+    opacity: 1;
+  }
+}
+
+/* The caret that follows the typing, gone the moment it finishes. */
+.typed-caret {
+  display: inline-block;
+  width: 0.055em;
+  height: 0.78em;
+  margin-left: 0.05em;
+  vertical-align: baseline;
+  background: rgb(var(--color-accent));
+  animation: typedCaret 0.62s steps(1) infinite;
+}
+
+@keyframes typedCaret {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+/* The blocks that replaced the boxed cards: nothing but type and a stroke. */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 620ms ease,
+    transform 720ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: calc(var(--d, 0) * 70ms);
+}
+
+.reveal-up.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* The stroke follows its block in rather than arriving with it. */
+.reveal-up.is-in .brush-rule {
+  transform: scaleX(1);
+  transition-delay: calc(var(--d, 0) * 70ms + 260ms);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .brush-rule {
+    transform: scaleX(1);
+  }
+
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+  }
+
+  .typed-caret {
+    display: none;
+  }
+}
+
+/* Card size comes from the height, not from how many fit across - the
+   section has to stay short enough to hold under the header, so the height is
+   the fixed quantity and the width follows it. That keeps the photos upright
+   instead of squaring off as more of them are packed in. */
+:root {
+  --card-h: 38vh;
+  --card-w: 25vh;
+  --card-overlap: 0.34;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --card-h: 34vh;
+    --card-w: 22vh;
+  }
+}
+
+.portfolio-slot {
+  width: var(--card-w);
+}
+
+/* Each one lies over the tail of the one before it, like a hand of cards
+   spread on a table. */
+.portfolio-slot + .portfolio-slot {
+  margin-left: calc(var(--card-w) * var(--card-overlap) * -1);
+}
+
+.portfolio-media {
+  height: var(--card-h);
+}
+
+/* The one under the cursor comes out from under its neighbours and stands
+   clear of the rest. */
+.portfolio-slot:hover {
+  z-index: 20;
+}
+
+/* Every card sits at a slight angle, a different one along the row, so the
+   strip reads as photographs laid down by hand rather than a filmstrip. */
+.portfolio-card {
+  transform: rotate(var(--tilt, 0deg));
+  transform-origin: center;
+  transition:
+    transform 320ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 320ms ease;
+}
+
+/* The one under the cursor straightens up and grows out of the strip in both
+   directions - the track is clipped left and right only, so it has room. */
+.portfolio-slot:hover .portfolio-card {
+  transform: rotate(0deg) scale(1.22);
+  filter: drop-shadow(0 0 26px rgb(var(--color-accent) / 0.55))
+    drop-shadow(0 0 64px rgb(var(--color-accent) / 0.3));
+}
+
+/* Parked until the scroll handler places them - the heading falls in, the
+   two lines of copy come from opposite sides. */
+.portfolio-reveal {
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* The heading travels up across the whole card area, so it has to paint over
+   the cards rather than climb along behind them. */
+h2.portfolio-reveal {
+  position: relative;
+  z-index: 2;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-card,
+  .portfolio-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* Hero owns the whole screen - nothing of the next section may show above
+   the fold. `lvh` is the tallest the viewport ever gets, so the hero is never
+   shorter than what is on screen even when a phone's toolbar retracts. */
+.hero-full {
+  height: 100vh;
+  height: 100lvh;
+  opacity: clamp(0, calc(1 - var(--seq, 0) * 2.4), 1);
+}
+
+/* Hero: the tilted, oversized block that holds the scrolling columns. Sized
+   past the viewport so rotating it never exposes a corner. Tune the tilt in
+   one place. */
+.hero-rotor {
+  --hero-tilt: -6deg;
+  position: absolute;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+  transform: rotate(var(--hero-tilt));
+  transform-origin: center;
+}
+
+/* Hero: solid page colour with the wordmark punched out of it. Two mask
+   layers - a full-coverage block and the logo - combined with `exclude`,
+   which leaves the logo shape as a hole. The moving photos below show
+   through only inside the letters. */
+.hero-knockout {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-knockout-plane {
+  fill: rgb(var(--color-background));
+}
+
+/* The hole spirals up to size once the intro is out of the way - whether it
+   ran to the end or the visitor skipped it.
+   It is held small only while the intro is actually running, so a page with
+   no working script still shows the logo at full size instead of a speck. */
+.hero-knockout-logo {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.intro-running .hero-knockout-logo {
+  transform: rotate(-1080deg) scale(0.004);
+}
+
+.intro-done .hero-knockout-logo {
+  animation: heroLogoSpiral 1.9s cubic-bezier(0.16, 0.84, 0.3, 1) both;
+}
+
+@keyframes heroLogoSpiral {
+  from {
+    /* Three full turns, from a speck. A multiple of 360 so it starts and
+       lands upright and only the turning between them shows. */
+    transform: rotate(-1080deg) scale(0.004);
+  }
+  to {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-running .hero-knockout-logo {
+    transform: none;
+  }
+
+  .intro-done .hero-knockout-logo {
+    animation: none;
+  }
+}
+
+/* Hero: columns of gallery images looping vertically, alternating direction.
+   The track holds the image list twice, so travelling 50% lands on a frame
+   identical to the start and the loop is seamless. Duration is set per
+   column on the element itself. */
+@keyframes heroScrollUp {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+@keyframes heroScrollDown {
+  from {
+    transform: translateY(-50%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.hero-track-up,
+.hero-track-down {
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: both;
+  will-change: transform;
+}
+
+.hero-track-up {
+  animation-name: heroScrollUp;
+}
+
+.hero-track-down {
+  animation-name: heroScrollDown;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-track-up,
+  .hero-track-down {
+    animation: none;
+    transform: translateY(-25%);
   }
 }
 

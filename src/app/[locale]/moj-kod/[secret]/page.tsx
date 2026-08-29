@@ -57,7 +57,7 @@ export default async function ReferralStatusPage({
     return (
       <div className="min-h-screen py-24">
         <div className="container mx-auto px-6 lg:px-8 max-w-2xl text-center">
-          <h1 className="text-4xl font-heading font-bold mb-4">{t('invalidTitle')}</h1>
+          <h1 className="text-4xl font-heading mb-4">{t('invalidTitle')}</h1>
           <p className="text-lg text-foreground/70">{t('invalidText')}</p>
         </div>
       </div>
@@ -92,7 +92,7 @@ export default async function ReferralStatusPage({
     <div className="min-h-screen py-24">
       <div className="container mx-auto px-6 lg:px-8 max-w-2xl">
         <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-2">{t('title')}</h1>
+          <h1 className="text-4xl md:text-5xl font-heading mb-2">{t('title')}</h1>
           <p className="text-lg text-foreground/70">{t('greeting', { name: referrer.name })}</p>
           <div className="w-24 h-1 bg-accent mx-auto mt-6" />
         </div>
@@ -122,7 +122,7 @@ export default async function ReferralStatusPage({
 
         {/* QR + share */}
         <div className="p-6 md:p-8 bg-foreground/5 rounded-lg border border-border text-center mb-10">
-          <h2 className="text-2xl font-heading font-bold mb-1">{t('shareTitle')}</h2>
+          <h2 className="text-2xl font-heading mb-1">{t('shareTitle')}</h2>
           <p className="text-foreground/70 font-body mb-6">{t('shareText')}</p>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -137,7 +137,7 @@ export default async function ReferralStatusPage({
         </div>
 
         {/* History */}
-        <h2 className="text-2xl font-heading font-bold mb-4">{t('historyTitle')}</h2>
+        <h2 className="text-2xl font-heading mb-4">{t('historyTitle')}</h2>
         {pendingCount > 0 && (
           <p className="text-sm text-foreground/60 mb-4">
             {t('pendingNote', { count: pendingCount })}

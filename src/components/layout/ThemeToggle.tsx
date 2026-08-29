@@ -40,7 +40,7 @@ export default function ThemeToggle() {
       className="group flex items-center justify-center"
       aria-label="Toggle theme"
     >
-      {theme === 'dark' ? <Sun className="w-6 h-6 icon-glow" /> : <Moon className="w-6 h-6 icon-glow" />}
+      {theme === 'dark' ? <Sun className="w-7 h-7 icon-glow" /> : <Moon className="w-7 h-7 icon-glow" />}
     </button>
   )
 }

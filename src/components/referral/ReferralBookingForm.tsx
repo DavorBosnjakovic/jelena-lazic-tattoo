@@ -131,7 +131,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
       <button
         type="submit"
         disabled={status === 'loading'}
-        className="w-full px-6 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 hover:scale-102 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+        className="btn btn-block"
       >
         {status === 'loading' ? t('sending') : t('send')}
       </button>

@@ -3,14 +3,37 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import ImageModal from './ImageModal'
+import RevealOnScroll from '@/components/ui/RevealOnScroll'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-const IMAGES_PER_PAGE = 9
+// Four full rows of the widest grid, so a page never ends on a stub.
+const IMAGES_PER_PAGE = 20
 
-function PortfolioImage({ src, alt, onClick }: { src: string; alt: string; onClick: () => void }) {
+// The angle each photograph swings to when the cursor is on it. A fixed list
+// rather than anything random, so the grid lays out the same on the server and
+// in the browser - and so neighbours never lean the same way.
+const HOVER_TILTS = [2.6, -3.2, 2, -2.4, 3.4, -2, 2.8, -3, 2.2, -2.6]
+
+// How far a photograph drifts inside its frame, top to bottom, as the tile
+// crosses the screen. There is 18% of slack at each edge, so this stays
+// inside what there is to give with a margin left over.
+const DRIFT_PERCENT = 14
+
+function PortfolioImage({
+  src,
+  alt,
+  index,
+  onClick,
+}: {
+  src: string
+  alt: string
+  index: number
+  onClick: () => void
+}) {
   const [isVisible, setIsVisible] = useState(false)
   const imgRef = useRef<HTMLDivElement>(null)
 
@@ -24,58 +47,35 @@ function PortfolioImage({ src, alt, onClick }: { src: string; alt: string; onCli
           }
         })
       },
-      {
-        rootMargin: '200px',
-      }
+      { rootMargin: '200px' }
     )
 
-    if (imgRef.current) {
-      observer.observe(imgRef.current)
-    }
-
-    return () => {
-      observer.disconnect()
-    }
+    if (imgRef.current) observer.observe(imgRef.current)
+    return () => observer.disconnect()
   }, [])
 
   return (
     <div
       ref={imgRef}
-      className="break-inside-avoid group cursor-pointer"
+      className="reveal-up portfolio-tile"
+      style={{ '--hover-tilt': `${HOVER_TILTS[index % HOVER_TILTS.length]}deg` } as CSSProperties}
       onClick={onClick}
     >
-      <div className="relative overflow-hidden rounded-lg shadow-lg hover:shadow-2xl transition-all duration-300">
-        <div className="relative aspect-auto">
-          {isVisible ? (
-            <Image
-              src={src}
-              alt={alt}
-              width={600}
-              height={800}
-              className="w-full h-auto object-cover transition-transform duration-300 group-hover:scale-105"
-              sizes="(max-width: 768px) 100vw, (max-width: 1199px) 50vw, 33vw"
-            />
-          ) : (
-            <div className="w-full h-[800px] bg-gray-200 dark:bg-gray-800 animate-pulse" />
-          )}
-        </div>
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 flex items-center justify-center">
-          <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            <svg
-              className="w-12 h-12 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
-              />
-            </svg>
-          </div>
-        </div>
+      {/* Two layers on purpose. The frame does the uncovering and the crop;
+          the tile around it is left free for the hover, so the reveal and the
+          hover never overwrite each other's transform. */}
+      <div className="portfolio-frame relative aspect-[3/4] overflow-hidden">
+        {isVisible ? (
+          <Image
+            src={src}
+            alt={alt}
+            fill
+            className="object-cover"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-foreground/5 animate-pulse" />
+        )}
       </div>
     </div>
   )
@@ -136,9 +136,53 @@ export default function PortfolioGrid() {
     setSelectedImage(portfolioImages[prevIndex])
   }
 
+  // A slow drift inside the crop as the grid scrolls past. The photograph is
+  // taller than its frame, so it has room to move without uncovering an edge.
+  useEffect(() => {
+    if (portfolioImages.length === 0) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+
+    let frame = 0
+
+    const place = () => {
+      frame = 0
+      const viewport = window.innerHeight
+
+      document.querySelectorAll<HTMLElement>('.portfolio-frame img').forEach((photo) => {
+        const frameBox = photo.parentElement
+        if (!frameBox) return
+
+        const box = frameBox.getBoundingClientRect()
+        if (box.bottom < 0 || box.top > viewport) return
+
+        // -1 when the tile sits at the bottom of the screen, +1 at the top.
+        const middle = box.top + box.height / 2
+        const progress = 1 - (middle / viewport) * 2
+        photo.style.transform = `translate3d(0, ${(progress * DRIFT_PERCENT).toFixed(2)}%, 0)`
+      })
+    }
+
+    const onScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(place)
+    }
+
+    place()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll, { passive: true })
+    return () => {
+      if (frame) window.cancelAnimationFrame(frame)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [portfolioImages.length, currentPage])
+
   const goToPage = (page: number) => {
+    // Jump first, swap second. The other way round the new tiles appear while
+    // the visitor is still down the page, get revealed where they stand, and
+    // the animation is over before it has been seen. Instant rather than
+    // smooth for the same reason.
+    window.scrollTo({ top: 0, behavior: 'auto' })
     setCurrentPage(page)
-    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   if (loading) {
@@ -161,41 +205,56 @@ export default function PortfolioGrid() {
 
   return (
     <>
-      <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-        {currentImages.map((image, index) => (
-          <PortfolioImage
-            key={startIndex + index}
-            src={image}
-            alt={t('imageAlt', { number: startIndex + index + 1 })}
-            onClick={() => openModal(image, index)}
-          />
-        ))}
-      </div>
+      {/* A grid, filling left to right along each row. The old layout packed
+          the photographs into vertical columns, which reads top to bottom per
+          column and shuffles itself as images load in. */}
+      <RevealOnScroll>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+          {currentImages.map((image, index) => (
+            <PortfolioImage
+              key={startIndex + index}
+              src={image}
+              alt={t('imageAlt', { number: startIndex + index + 1 })}
+              index={startIndex + index}
+              onClick={() => openModal(image, index)}
+            />
+          ))}
+        </div>
+      </RevealOnScroll>
 
       {totalPages > 1 && (
         <>
-          <div className="flex items-center justify-center gap-4 mt-16">
+          {/* Nothing boxed: bare chevrons, and the page you are on marked by
+              the same brush stroke used everywhere else on the site. */}
+          <div className="flex items-center justify-center gap-6 mt-16">
             <button
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage === 1}
-              className="p-3 rounded-lg border border-border bg-background hover:bg-accent hover:text-white hover:border-accent transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-foreground disabled:hover:border-border"
+              className="p-2 text-foreground/60 hover:text-accent transition-colors duration-200 disabled:opacity-25 disabled:hover:text-foreground/60"
               aria-label={t('prevAria')}
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-8 h-8" strokeWidth={1} />
             </button>
 
-            <div className="flex gap-2">
+            <div className="flex gap-5">
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => goToPage(page)}
-                  className={`px-4 py-2 rounded-lg font-nav font-semibold transition-all duration-200 ${
+                  className={`font-heading text-lg transition-colors duration-200 ${
                     currentPage === page
-                      ? 'bg-accent text-white'
-                      : 'bg-background border border-border hover:bg-accent/10 hover:border-accent'
+                      ? 'text-accent'
+                      : 'text-foreground/55 hover:text-foreground'
                   }`}
+                  aria-current={currentPage === page ? 'page' : undefined}
                 >
                   {page}
+                  <span
+                    aria-hidden="true"
+                    className={`brush-rule brush-rule-sm mt-1 w-full ${
+                      currentPage === page ? 'is-drawn' : ''
+                    }`}
+                  />
                 </button>
               ))}
             </div>
@@ -203,14 +262,14 @@ export default function PortfolioGrid() {
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="p-3 rounded-lg border border-border bg-background hover:bg-accent hover:text-white hover:border-accent transition-all duration-200 disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:bg-background disabled:hover:text-foreground disabled:hover:border-border"
+              className="p-2 text-foreground/60 hover:text-accent transition-colors duration-200 disabled:opacity-25 disabled:hover:text-foreground/60"
               aria-label={t('nextAria')}
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-8 h-8" strokeWidth={1} />
             </button>
           </div>
 
-          <div className="text-center mt-6 text-sm text-foreground/60">
+          <div className="text-center mt-6 text-sm text-foreground/50 font-body">
             {t('showing', { from: startIndex + 1, to: Math.min(endIndex, portfolioImages.length), total: portfolioImages.length })}
           </div>
         </>

@@ -58,11 +58,11 @@ export default async function ReferralLandingPage({
     return (
       <div className="min-h-screen py-24">
         <div className="container mx-auto px-6 lg:px-8 max-w-2xl text-center">
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">{t('invalidTitle')}</h1>
+          <h1 className="text-4xl md:text-5xl font-heading mb-4">{t('invalidTitle')}</h1>
           <p className="text-lg text-foreground/70 mb-8">{t('invalidText')}</p>
           <Link
             href="/contact"
-            className="inline-block px-6 py-3 bg-accent text-white font-nav font-semibold rounded-md hover:bg-accent/90 transition-all duration-200"
+            className="btn inline-block"
           >
             {t('invalidCta')}
           </Link>
@@ -78,7 +78,7 @@ export default async function ReferralLandingPage({
           <p className="text-sm font-nav uppercase tracking-widest text-accent mb-3">
             {t('badge', { name: referrer.name })}
           </p>
-          <h1 className="text-4xl md:text-5xl font-heading font-bold mb-4">{renderWithPercent(t('title'))}</h1>
+          <h1 className="text-4xl md:text-5xl font-heading mb-4">{renderWithPercent(t('title'))}</h1>
           <p className="text-lg text-foreground/70">{t('subtitle')}</p>
           <div className="w-24 h-1 bg-accent mx-auto mt-6" />
         </div>
@@ -88,11 +88,11 @@ export default async function ReferralLandingPage({
           <p className="text-center text-3xl font-bold tracking-widest text-accent mb-0">{referrer.code}</p>
         </div>
 
-        <h2 className="text-2xl font-heading font-bold mb-6">{t('formTitle')}</h2>
+        <h2 className="text-2xl font-heading mb-6">{t('formTitle')}</h2>
         <ReferralBookingForm code={referrer.code} />
 
         <div className="mt-12 pt-10 border-t border-border text-center">
-          <h2 className="text-2xl font-heading font-bold mb-2">{t('orMessageTitle')}</h2>
+          <h2 className="text-2xl font-heading mb-2">{t('orMessageTitle')}</h2>
           <p className="text-foreground/70 font-body mb-6">{t('orMessageText')}</p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
