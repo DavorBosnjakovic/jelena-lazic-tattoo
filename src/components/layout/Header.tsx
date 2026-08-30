@@ -101,8 +101,14 @@ export default function Header() {
       header.style.pointerEvents = progress > 0.08 ? 'auto' : 'none'
 
       parts.forEach((part, index) => {
-        const start = index * 0.07
-        const risen = ease(clamp((progress - start) / 0.55))
+        // Well apart, and each one quick. At a step of 0.07 against a climb
+        // lasting 0.55 the parts overlapped almost entirely, and a row that
+        // is nine tenths in flight together reads as one block arriving, not
+        // as six things arriving one after another. Six parts at a step of
+        // 0.13 leaves the last of them setting off at 0.65 and home by 0.97,
+        // so the whole row still lands inside the scroll it is given.
+        const start = index * 0.13
+        const risen = ease(clamp((progress - start) / 0.32))
 
         if (risen === 1) {
           // Hand the element back to its own stylesheet. Leaving an inline
