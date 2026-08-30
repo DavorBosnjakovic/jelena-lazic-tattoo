@@ -36,7 +36,11 @@ const OVERLAP = 0.34
 
 // Only the cards that can be on screen take part; the rest sit off to the
 // side behind the clip and nobody sees them arrive.
-const CARDS_THAT_FLY_IN = 20
+// How many is a question of how much room the deck has to be dealt across.
+// Twenty spread over a desktop reads as a hand laid out on a table; the same
+// twenty dealt across a phone is a scramble, because they land on top of one
+// another faster than the eye can follow them.
+const flyInCount = (width: number) => (width < 768 ? 7 : width < 1024 ? 12 : 20)
 
 // The deck arrives from off screen on the left as one stack, then spreads out
 // to the right a card at a time. Shares of the section's travel up the screen.
@@ -46,8 +50,10 @@ const FAN_SPAN = 0.3
 
 // Spread so the last card in the deck settles just before the section has
 // finished crossing the screen. A fixed step would leave the tail of a long
-// deck still half dealt when the scroll runs out.
-const FAN_STAGGER = (0.96 - FAN_FROM - FAN_SPAN) / (CARDS_THAT_FLY_IN - 1)
+// deck still half dealt when the scroll runs out - and a short deck would be
+// done long before it, with the rest of the scroll spent watching nothing.
+const fanStagger = (count: number) =>
+  (0.96 - FAN_FROM - FAN_SPAN) / Math.max(1, count - 1)
 
 // The reveal is spread across the section crossing the screen, as shares of
 // that travel. Heading first from below, then the two lines of copy from
@@ -83,6 +89,11 @@ export default function PortfolioCarousel() {
   const dragging = useRef(false)
   const dragOffset = useRef(0)
   const carouselRef = useRef<HTMLDivElement>(null)
+
+  // Settled on the server at the desktop figure and corrected on mount. It
+  // decides which cards a ref is hung on, nothing that is rendered, so the
+  // two never disagree over the markup.
+  const [flyIn, setFlyIn] = useState(() => flyInCount(1280))
 
   // Distance from one card to the next. Measured rather than assumed, because
   // the width is set in CSS from the viewport height.
@@ -123,6 +134,24 @@ export default function PortfolioCarousel() {
     window.addEventListener('resize', measure)
     return () => window.removeEventListener('resize', measure)
   }, [portfolioImages.length])
+
+  useEffect(() => {
+    const decide = () => setFlyIn(flyInCount(window.innerWidth))
+
+    decide()
+    window.addEventListener('resize', decide)
+    return () => window.removeEventListener('resize', decide)
+  }, [])
+
+  // A card dropped from the deal must not be left holding the offset the last
+  // one gave it, or it sits out of the row for good.
+  useEffect(() => {
+    flyingCards.current.forEach((card) => {
+      if (!card) return
+      card.style.transition = ''
+      card.style.transform = ''
+    })
+  }, [flyIn])
 
   // The strip has no pages. An arrow adds to a debt that the drift loop pays
   // off over the next few frames, so it glides instead of jumping.
@@ -225,11 +254,17 @@ export default function PortfolioCarousel() {
 
       const width = track.getBoundingClientRect().width
       const entered = ease(span(progress, 0, DECK_ENTERS))
+      const stagger = fanStagger(flyIn)
 
       flyingCards.current.forEach((card, index) => {
         if (!card) return
 
-        const from = FAN_FROM + index * FAN_STAGGER
+        // Dealt off the top of the pile, not out from under it. The cards lie
+        // in source order, so the last one is the one on top - it goes right
+        // first and uncovers the next, the way a deck is pushed out across a
+        // table. Started from the first card instead, the deal came out of the
+        // bottom of the pile and the cards on top just sat there.
+        const from = FAN_FROM + (flyIn - 1 - index) * stagger
         const fanned = ease(span(progress, from, from + FAN_SPAN))
 
         if (entered === 1 && fanned === 1) {
@@ -274,7 +309,7 @@ export default function PortfolioCarousel() {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onResize)
     }
-  }, [portfolioImages.length, step])
+  }, [portfolioImages.length, step, flyIn])
 
   // One continuous drift. The image list is laid out three times over, and
   // once the strip has travelled the width of one full list it is snapped
@@ -457,7 +492,7 @@ export default function PortfolioCarousel() {
               no transition, or the wrap-around would be animated and show. */}
           <div className="flex" style={{ userSelect: 'none' }}>
             {extendedImages.map((src, index) => {
-              const fliesIn = index < CARDS_THAT_FLY_IN
+              const fliesIn = index < flyIn
 
               return (
                 <div
@@ -469,7 +504,7 @@ export default function PortfolioCarousel() {
                       track's own transform. */}
                   <div
                     ref={(node) => {
-                      if (fliesIn) flyingCards.current[index] = node
+                      flyingCards.current[index] = fliesIn ? node : null
                     }}
                     className="portfolio-card"
                     style={{ '--tilt': `${TILTS[index % TILTS.length]}deg` } as CSSProperties}

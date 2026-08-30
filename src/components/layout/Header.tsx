@@ -3,12 +3,14 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import { Menu, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { Link, usePathname } from '@/i18n/navigation'
 import ThemeToggle from './ThemeToggle'
 import LocaleSwitcher from './LocaleSwitcher'
+import SocialIcon from '@/components/ui/SocialIcon'
 
 const navItems = [
   { key: 'about', href: '/about' },
@@ -17,12 +19,24 @@ const navItems = [
   { key: 'contact', href: '/contact' },
 ] as const
 
+// The same set the footer carries, in the same order.
+const socialLinks = [
+  { name: 'Instagram', url: 'https://www.instagram.com/jelena_lazic_tattoo', icon: '/social/instagram.webp' },
+  { name: 'Facebook', url: 'https://www.facebook.com/jelenalazictattoo', icon: '/social/facebook.webp' },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@jelenalazictattoo', icon: '/social/tiktok.webp' },
+  { name: 'WhatsApp', url: 'https://wa.me/381615849416', icon: '/social/whatsapp.webp' },
+  { name: 'Telegram', url: 'https://t.me/+381615849416', icon: '/social/telegram.webp' },
+]
+
 export default function Header() {
   const t = useTranslations('nav')
+  const tFooter = useTranslations('footer')
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const pathname = usePathname()
   const headerRef = useRef<HTMLElement | null>(null)
+  const panelRef = useRef<HTMLDivElement | null>(null)
+  const panelContentsRef = useRef<HTMLDivElement | null>(null)
 
   // The home page opens on a full-screen hero with nothing over it, so the
   // header is not there at rest - it assembles as soon as the visitor starts
@@ -137,6 +151,27 @@ export default function Header() {
     }
   }, [mobileMenuOpen])
 
+  // The panel opens to the height of what is in it. The contents are not
+  // themselves height constrained - only the panel around them clips - so
+  // this reads true even while the panel is shut.
+  useEffect(() => {
+    const panel = panelRef.current
+    const contents = panelContentsRef.current
+    if (!panel || !contents) return
+
+    const measure = () => {
+      // Held to what is left of the screen under the bar. Past that the panel
+      // scrolls, rather than running off the bottom with the contacts on it.
+      const room = window.innerHeight - 80
+      const height = Math.min(contents.scrollHeight, room)
+      panel.style.setProperty('--menu-h', `${height}px`)
+    }
+
+    measure()
+    window.addEventListener('resize', measure)
+    return () => window.removeEventListener('resize', measure)
+  }, [mobileMenuOpen, pathname])
+
   return (
     <header
       ref={headerRef}
@@ -207,62 +242,107 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Mobile Menu - Full screen overlay */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-foreground z-[100] md:hidden h-screen w-screen">
-          {/* Header bar replica */}
-          <div className="h-20 flex items-center justify-between px-6 lg:px-8 border-b border-background/10">
-            <Link
-              href="/"
-              onClick={() => setMobileMenuOpen(false)}
-              aria-label={t('homeAria')}
-              className="relative h-10 w-auto"
-            >
-              <Image
-                src="/logos/logo-dark-mode.webp"
-                alt="Jelena Lazić Tattoo"
-                width={120}
-                height={40}
-                className="h-10 w-auto dark:hidden"
-              />
-              <Image
-                src="/logos/logo-light-mode.webp"
-                alt="Jelena Lazić Tattoo"
-                width={120}
-                height={40}
-                className="h-10 w-auto hidden dark:block"
-              />
-            </Link>
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="group text-background"
-              aria-label="Close menu"
-            >
-              <X className="w-6 h-6 icon-glow" />
-            </button>
-          </div>
+      {/* The menu drops out from under the bar. Always in the document, so it
+          can be watched closing as well as opening; `inert` keeps the closed
+          panel out of the way of the keyboard and the screen reader. */}
+      <div
+        id="mobile-menu"
+        ref={panelRef}
+        inert={!mobileMenuOpen}
+        className={`mobile-menu md:hidden ${mobileMenuOpen ? 'is-open' : ''}`}
+      >
+        <div ref={panelContentsRef}>
+          <div className="container mx-auto px-6 pt-4 pb-8">
+            <nav className="font-nav">
+              {navItems.map((item, index) => (
+                <div
+                  key={item.href}
+                  className="menu-item"
+                  style={{ '--d': index } as CSSProperties}
+                >
+                  <Link
+                    href={item.href}
+                    aria-current={pathname === item.href ? 'page' : undefined}
+                    className={`menu-link ${pathname === item.href ? 'is-active' : ''}`}
+                  >
+                    {t(item.key)}
+                  </Link>
+                </div>
+              ))}
+            </nav>
 
-          <nav className="flex flex-col items-center space-y-8 pt-12">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`font-nav text-2xl font-medium transition-colors duration-200 ${
-                  pathname === item.href
-                    ? 'text-accent font-semibold'
-                    : 'text-background hover:text-accent'
-                }`}
-              >
-                {t(item.key)}
-              </Link>
-            ))}
-            <div className="flex items-center gap-6 pt-4 text-background">
-              <LocaleSwitcher />
-              <ThemeToggle />
+            {/* The row inside the riser, not on it - the riser is forced to
+                be a block so it can be clipped. */}
+            <div
+              className="menu-item"
+              style={{ '--d': navItems.length } as CSSProperties}
+            >
+              <div>
+                <div className="flex items-center justify-center gap-6 pt-6">
+                  <LocaleSwitcher />
+                  <ThemeToggle />
+                </div>
+              </div>
             </div>
-          </nav>
+
+            {/* Who this is and how to reach her, at the foot of the panel. */}
+            <div
+              className="menu-item"
+              style={{ '--d': navItems.length + 1 } as CSSProperties}
+            >
+              <div className="mt-7 pt-7 border-t border-border text-center">
+                <Link
+                  href="/"
+                  aria-label={t('homeAria')}
+                  className="inline-block"
+                >
+                  <Image
+                    src="/logos/logo-light-mode.webp"
+                    alt="Jelena Lazić Tattoo"
+                    width={180}
+                    height={60}
+                    className="h-14 w-auto dark:hidden"
+                  />
+                  <Image
+                    src="/logos/logo-dark-mode.webp"
+                    alt="Jelena Lazić Tattoo"
+                    width={180}
+                    height={60}
+                    className="h-14 w-auto hidden dark:block"
+                  />
+                </Link>
+
+                <p className="mt-5 text-sm text-foreground/70">{tFooter('location')}</p>
+                <a
+                  href="tel:+381615849416"
+                  className="block text-sm text-foreground/70 hover:text-accent transition-colors"
+                >
+                  +381 61 584 9416
+                </a>
+
+                <div className="flex justify-center gap-5 mt-5">
+                  {socialLinks.map((social) => (
+                    <a
+                      key={social.name}
+                      href={social.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.name}
+                      className="group w-6 h-6 text-foreground/70 transition-transform duration-300 hover:scale-110"
+                    >
+                      <SocialIcon
+                        icon={social.icon}
+                        name={social.name}
+                        className="w-full h-full"
+                      />
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </header>
   )
 }
