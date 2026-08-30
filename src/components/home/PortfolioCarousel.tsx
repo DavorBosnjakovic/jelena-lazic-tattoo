@@ -87,7 +87,9 @@ export default function PortfolioCarousel() {
   // per pointer move tore that loop down and rebuilt it on every pixel of the
   // drag - which is why dragging did nothing on a phone.
   const dragging = useRef(false)
-  const dragOffset = useRef(0)
+  // How far the current drag had travelled when it was last read, so each
+  // move can be applied as the step since the last one.
+  const draggedSoFar = useRef(0)
   const carouselRef = useRef<HTMLDivElement>(null)
 
   // Settled on the server at the desktop figure and corrected on mount. It
@@ -349,10 +351,15 @@ export default function PortfolioCarousel() {
       }
       previous = now
 
-      if (offset.current <= -lap) offset.current += lap
-      if (offset.current > 0) offset.current -= lap
+      // Looped before it is drawn, so nothing can ever be shown outside the
+      // one lap the strip is allowed to occupy. `while`, not `if`: a hard
+      // flick can cover more than a lap between two frames, and a single
+      // subtraction would leave it out of range with the row hanging off its
+      // own end.
+      while (offset.current <= -lap) offset.current += lap
+      while (offset.current > 0) offset.current -= lap
 
-      track.style.transform = `translateX(${(offset.current + dragOffset.current).toFixed(2)}px)`
+      track.style.transform = `translateX(${offset.current.toFixed(2)}px)`
       frame = window.requestAnimationFrame(tick)
     }
 
@@ -363,19 +370,22 @@ export default function PortfolioCarousel() {
   const { dragged, handlers: dragHandlers } = useHorizontalDrag({
     onStart: () => {
       dragging.current = true
+      draggedSoFar.current = 0
       // Any arrow nudge still gliding is dropped: the finger is in charge now.
       pending.current = 0
     },
+    // The step since the last move, added straight onto the strip's own
+    // position. Held apart as a second offset and only added on at the end,
+    // it escaped the looping that keeps the strip inside one lap - so a long
+    // drag pushed the row off its own start and uncovered the bare page
+    // beside it.
     onMove: (dx) => {
-      dragOffset.current = dx
+      offset.current += dx - draggedSoFar.current
+      draggedSoFar.current = dx
     },
     onEnd: (dx, velocity) => {
       dragging.current = false
-
-      // Folded into the strip's own position and zeroed, or the strip would
-      // spring back to where the drag started.
-      offset.current += dx
-      dragOffset.current = 0
+      draggedSoFar.current = 0
 
       // A flick carries on. Handed to the same debt the arrows use, so it
       // glides to a stop rather than stopping dead the moment the finger
