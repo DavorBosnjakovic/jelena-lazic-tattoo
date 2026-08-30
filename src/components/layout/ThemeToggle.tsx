@@ -22,7 +22,7 @@ export default function ThemeToggle() {
     const newTheme = theme === 'light' ? 'dark' : 'light'
     setTheme(newTheme)
     localStorage.setItem('theme', newTheme)
-    
+
     if (newTheme === 'dark') {
       document.documentElement.classList.add('dark')
     } else {
@@ -30,17 +30,32 @@ export default function ThemeToggle() {
     }
   }
 
+  // Holds the space until the stored choice is known, so the bar does not
+  // shuffle when the switch appears.
   if (!mounted) {
-    return <div className="w-8 h-8" />
+    return <div className="w-[4.25rem] h-8" />
   }
 
+  const light = theme === 'light'
+
   return (
-    <button
-      onClick={toggle}
-      className="group flex items-center justify-center"
-      aria-label="Toggle theme"
-    >
-      {theme === 'dark' ? <Sun className="w-7 h-7 icon-glow" /> : <Moon className="w-7 h-7 icon-glow" />}
-    </button>
+    <label className="switch" title={light ? 'Light' : 'Dark'}>
+      <input
+        type="checkbox"
+        checked={light}
+        onChange={toggle}
+        aria-label={light ? 'Switch to dark theme' : 'Switch to light theme'}
+      />
+      <span className="slider">
+        {/* The knob shows what is on, not what it would switch to. */}
+        <span className="slider-btn">
+          <span className="texture" />
+          <span className="switch-face">
+            {light ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+          </span>
+          <span className="texture" />
+        </span>
+      </span>
+    </label>
   )
 }

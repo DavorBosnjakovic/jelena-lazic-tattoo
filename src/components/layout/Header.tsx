@@ -285,59 +285,60 @@ export default function Header() {
               </div>
             </div>
 
-            {/* Who this is and how to reach her, at the foot of the panel. */}
-            <div
-              className="menu-item"
-              style={{ '--d': navItems.length + 1 } as CSSProperties}
-            >
-              <div className="mt-7 pt-7 border-t border-border text-center">
-                <Link
-                  href="/"
-                  aria-label={t('homeAria')}
-                  className="inline-block"
-                >
-                  <Image
-                    src="/logos/logo-light-mode.webp"
-                    alt="Jelena Lazić Tattoo"
-                    width={180}
-                    height={60}
-                    className="h-14 w-auto dark:hidden"
-                  />
-                  <Image
-                    src="/logos/logo-dark-mode.webp"
-                    alt="Jelena Lazić Tattoo"
-                    width={180}
-                    height={60}
-                    className="h-14 w-auto hidden dark:block"
-                  />
-                </Link>
+            {/* The foot does not arrive like a line of the menu. The logo
+                waits until every line has landed and then simply appears, the
+                address slides in from the left, and the icons are dealt in
+                from off to the side the way they are on the Contact page. */}
+            <div className="mt-7 pt-7 border-t border-border text-center">
+              <Link
+                href="/"
+                aria-label={t('homeAria')}
+                className="menu-logo inline-block"
+              >
+                <Image
+                  src="/logos/logo-light-mode.webp"
+                  alt="Jelena Lazić Tattoo"
+                  width={180}
+                  height={60}
+                  className="h-14 w-auto dark:hidden"
+                />
+                <Image
+                  src="/logos/logo-dark-mode.webp"
+                  alt="Jelena Lazić Tattoo"
+                  width={180}
+                  height={60}
+                  className="h-14 w-auto hidden dark:block"
+                />
+              </Link>
 
-                <p className="mt-5 text-sm text-foreground/70">{tFooter('location')}</p>
+              <div className="menu-contact mt-5">
+                <p className="text-sm text-foreground/70">{tFooter('location')}</p>
                 <a
                   href="tel:+381615849416"
                   className="block text-sm text-foreground/70 hover:text-accent transition-colors"
                 >
                   +381 61 584 9416
                 </a>
+              </div>
 
-                <div className="flex justify-center gap-5 mt-5">
-                  {socialLinks.map((social) => (
-                    <a
-                      key={social.name}
-                      href={social.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.name}
-                      className="group w-6 h-6 text-foreground/70 transition-transform duration-300 hover:scale-110"
-                    >
-                      <SocialIcon
-                        icon={social.icon}
-                        name={social.name}
-                        className="w-full h-full"
-                      />
-                    </a>
-                  ))}
-                </div>
+              <div className="flex justify-center gap-5 mt-5">
+                {socialLinks.map((social, i) => (
+                  <a
+                    key={social.name}
+                    href={social.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={social.name}
+                    style={{ '--i': i } as CSSProperties}
+                    className="menu-social group w-6 h-6 text-foreground/70"
+                  >
+                    <SocialIcon
+                      icon={social.icon}
+                      name={social.name}
+                      className="w-full h-full"
+                    />
+                  </a>
+                ))}
               </div>
             </div>
           </div>
