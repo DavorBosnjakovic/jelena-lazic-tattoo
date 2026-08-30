@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react'
 import type { CSSProperties } from 'react'
 import Image from 'next/image'
 import { useTranslations } from 'next-intl'
-import ImageModal from './ImageModal'
+import ImageViewer from '@/components/ui/ImageViewer'
 import RevealOnScroll from '@/components/ui/RevealOnScroll'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
@@ -275,12 +275,15 @@ export default function PortfolioGrid() {
         </>
       )}
 
-      <ImageModal
+      <ImageViewer
         isOpen={!!selectedImage}
-        imageSrc={selectedImage || ''}
+        images={portfolioImages}
+        index={selectedIndex}
+        onIndexChange={(next) => {
+          setSelectedIndex(next)
+          setSelectedImage(portfolioImages[next])
+        }}
         onClose={closeModal}
-        onNext={showNext}
-        onPrev={showPrev}
       />
     </>
   )

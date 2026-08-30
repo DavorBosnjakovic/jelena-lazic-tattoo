@@ -8,7 +8,7 @@ import Image from 'next/image'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import ImageModal from './ImageModal'
+import ImageViewer from '@/components/ui/ImageViewer'
 import useHorizontalDrag from '@/components/ui/useHorizontalDrag'
 
 // Pixels per second the strip drifts. Slow enough to read, never stops.
@@ -490,11 +490,13 @@ export default function PortfolioCarousel() {
 
         {/* Clipped left and right only - the arriving cards have to be free to
             come from above and below. */}
-        {/* touch-pan-y hands vertical gestures back to the browser so the page
-            still scrolls, and keeps the horizontal ones for the strip. Without
-            it the browser claims the whole gesture and no move ever arrives. */}
+        {/* Vertical gestures go back to the browser so the page still scrolls,
+            and a pinch goes back to it so the page can still be zoomed; the
+            horizontal ones are kept for the strip. Plain `pan-y` kept the
+            drag but took the pinch with it, which is why nothing here could
+            be zoomed. */}
         <div
-          className="carousel-clip cursor-grab active:cursor-grabbing touch-pan-y"
+          className="carousel-clip cursor-grab active:cursor-grabbing [touch-action:pan-y_pinch-zoom]"
           ref={carouselRef}
           {...dragHandlers}
         >
@@ -557,8 +559,7 @@ export default function PortfolioCarousel() {
         </Link>
       </div>
 
-      {/* Image Modal */}
-      <ImageModal
+      <ImageViewer
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
         images={portfolioImages}
