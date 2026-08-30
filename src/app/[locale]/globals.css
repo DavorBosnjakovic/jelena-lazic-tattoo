@@ -1202,8 +1202,8 @@ h2.portfolio-reveal {
   backdrop-filter: blur(12px);
   border-bottom: 1px solid transparent;
   transition:
-    max-height 460ms cubic-bezier(0.2, 0.8, 0.2, 1),
-    border-color 460ms ease;
+    max-height 280ms cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 280ms ease;
 }
 
 /* --menu-h is the measured height of the contents, written by the header, and
@@ -1231,14 +1231,21 @@ h2.portfolio-reveal {
   overflow: hidden;
 }
 
-.menu-item > * {
+/* Named through the panel, so this outweighs `.menu-link` below. On equal
+   specificity the link won on source order, and because `transition` is a
+   shorthand, winning meant wiping this one out - the lines had no transition
+   on `translate` at all and simply snapped into place. The colour fade the
+   link wanted is carried here instead, so nothing needs to compete. */
+.mobile-menu .menu-item > * {
   display: block;
   /* Anything that wants a row of its own puts it inside this block, never on
      it - a `display: flex` here would be overwritten and the row would come
      out stacked. */
   translate: 0 100%;
-  transition: translate 560ms cubic-bezier(0.35, 0.55, 0.2, 1);
-  transition-delay: calc(40ms + var(--d, 0) * 75ms);
+  transition:
+    translate 560ms cubic-bezier(0.35, 0.55, 0.2, 1)
+      calc(280ms + var(--d, 0) * 75ms),
+    color 200ms ease;
 }
 
 .mobile-menu.is-open .menu-item > * {
@@ -1255,7 +1262,7 @@ h2.portfolio-reveal {
 
 .mobile-menu.is-open .menu-logo {
   opacity: 1;
-  transition-delay: 850ms;
+  transition-delay: 1100ms;
 }
 
 /* The address and the number slide in from the left, behind the panel's own
@@ -1264,14 +1271,14 @@ h2.portfolio-reveal {
   opacity: 0;
   transform: translateX(-64px);
   transition:
-    opacity 420ms ease,
-    transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    opacity 380ms ease,
+    transform 380ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .mobile-menu.is-open .menu-contact {
   opacity: 1;
   transform: none;
-  transition-delay: 950ms;
+  transition-delay: 1160ms;
 }
 
 /* The same flight the icons make on the Contact page - in from off to the left
@@ -1285,8 +1292,8 @@ h2.portfolio-reveal {
 }
 
 .mobile-menu.is-open .menu-social {
-  animation: dealIn 440ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
-  animation-delay: calc(1020ms + var(--i, 0) * 55ms);
+  animation: dealIn 400ms cubic-bezier(0.2, 0.75, 0.25, 1) both;
+  animation-delay: calc(1220ms + var(--i, 0) * 50ms);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1294,7 +1301,7 @@ h2.portfolio-reveal {
     transition: none;
   }
 
-  .menu-item > * {
+  .mobile-menu .menu-item > * {
     translate: none;
     transition: none;
   }
@@ -1321,11 +1328,10 @@ h2.portfolio-reveal {
 
 .menu-link {
   position: relative;
-  padding: 0.85rem 0;
+  padding: 1.35rem 0;
   font-size: 1.5rem;
   font-weight: 500;
   color: rgb(var(--color-foreground));
-  transition: color 200ms ease;
 }
 
 .menu-link:hover {
