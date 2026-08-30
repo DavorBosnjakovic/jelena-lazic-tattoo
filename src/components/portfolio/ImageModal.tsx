@@ -100,7 +100,12 @@ export default function ImageModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fadeIn touch-pan-y"
+      // touch-none, not pan-y. There is nothing behind this to scroll - the
+      // page under it is locked while it is open - so there is no gesture for
+      // the browser to arbitrate. Left as pan-y it had to decide whose the
+      // gesture was before releasing it, and the picture sat still under the
+      // finger until it let go.
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm animate-fadeIn touch-none"
       // A drag that happens to finish over the backdrop is still a drag, and
       // must not be taken for a click on it.
       onClick={() => {
@@ -149,7 +154,7 @@ export default function ImageModal({
         {/* The drag rides on this layer, not on the one above it: that one
             carries the opening animation, and the two would overwrite each
             other's transform. */}
-        <div ref={stage} className="relative w-full h-full">
+        <div ref={stage} className="relative w-full h-full will-change-transform">
           <Image
             src={imageSrc}
             alt="Tattoo design full view"

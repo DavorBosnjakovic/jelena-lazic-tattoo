@@ -107,7 +107,12 @@ export default function ImageModal({
 
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-lg touch-pan-y"
+      // touch-none, not pan-y. There is nothing behind this to scroll - the
+      // page under it is locked while it is open - so there is no gesture for
+      // the browser to arbitrate. Left as pan-y it had to decide whose the
+      // gesture was before releasing it, and the picture sat still under the
+      // finger until it let go.
+      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-lg touch-none"
       // A drag that happens to finish over the backdrop is still a drag, and
       // must not be taken for a click on it.
       onClick={() => {
@@ -159,7 +164,7 @@ export default function ImageModal({
       {/* Image container */}
       <div
         ref={stage}
-        className="relative w-[90vw] h-[85vh] max-w-6xl"
+        className="relative w-[90vw] h-[85vh] max-w-6xl will-change-transform"
         onClick={(e) => e.stopPropagation()}
       >
         <Image
