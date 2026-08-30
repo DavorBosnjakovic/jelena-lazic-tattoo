@@ -81,7 +81,7 @@ export default function Header() {
       })
     }
 
-    if (!overHero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       clear()
       return
     }
@@ -90,25 +90,22 @@ export default function Header() {
     const ease = (value: number) => value * value * (3 - 2 * value)
     const clamp = (value: number) => Math.min(1, Math.max(0, value))
 
-    const assemble = () => {
+    // Where every part stands at a given point in the sequence. The same
+    // arithmetic serves both pages: on the home page the progress comes from
+    // the scroll away from the hero, everywhere else from a clock.
+    const place = (progress: number) => {
       const viewport = window.innerHeight
       if (parts.length === 0) parts = visible()
-      const progress = clamp(window.scrollY / (viewport * 0.45))
-
-      // The bar itself only darkens once its contents are on their way, so an
-      // empty strip never sits over the hero.
-      header.style.backgroundColor = `rgb(var(--color-background) / ${(progress * 0.85).toFixed(3)})`
-      header.style.pointerEvents = progress > 0.08 ? 'auto' : 'none'
 
       parts.forEach((part, index) => {
         // Well apart, and each one quick. At a step of 0.07 against a climb
         // lasting 0.55 the parts overlapped almost entirely, and a row that
         // is nine tenths in flight together reads as one block arriving, not
-        // as six things arriving one after another. Six parts at a step of
-        // 0.13 leaves the last of them setting off at 0.65 and home by 0.97,
-        // so the whole row still lands inside the scroll it is given.
-        const start = index * 0.13
-        const risen = ease(clamp((progress - start) / 0.32))
+        // as seven things arriving one after another. Seven parts at a step
+        // of 0.115 leaves the last of them setting off at 0.69 and home by
+        // 0.99, so the whole row still lands inside the run it is given.
+        const start = index * 0.115
+        const risen = ease(clamp((progress - start) / 0.3))
 
         if (risen === 1) {
           // Hand the element back to its own stylesheet. Leaving an inline
@@ -120,8 +117,8 @@ export default function Header() {
         }
 
         // These elements carry a `transition` class for their hover states.
-        // Left on, it would stretch every scroll write over 200ms and the
-        // climb would lag behind the finger.
+        // Left on, it would stretch every write over 200ms and the climb
+        // would lag behind whatever is driving it.
         part.style.transition = 'none'
         // Each one starts a little short of the one before it, so the row
         // never travels as a single block.
@@ -131,16 +128,61 @@ export default function Header() {
       })
     }
 
-    assemble()
-    window.addEventListener('scroll', assemble, { passive: true })
-    const onResize = () => {
-      parts = visible()
+    if (overHero) {
+      const assemble = () => {
+        const progress = clamp(window.scrollY / (window.innerHeight * 0.45))
+
+        // The bar itself only darkens once its contents are on their way, so
+        // an empty strip never sits over the hero.
+        header.style.backgroundColor = `rgb(var(--color-background) / ${(progress * 0.85).toFixed(3)})`
+        header.style.pointerEvents = progress > 0.08 ? 'auto' : 'none'
+
+        place(progress)
+      }
+
       assemble()
+      window.addEventListener('scroll', assemble, { passive: true })
+      const onResize = () => {
+        parts = visible()
+        assemble()
+      }
+      window.addEventListener('resize', onResize, { passive: true })
+      return () => {
+        window.removeEventListener('scroll', assemble)
+        window.removeEventListener('resize', onResize)
+        clear()
+      }
     }
-    window.addEventListener('resize', onResize, { passive: true })
+
+    // Everywhere else the bar is simply there from the start, so the same
+    // sequence is played once off a clock. Tied to the scroll it would wait
+    // for a scroll that on a short page never comes.
+    const RUN = 1200
+    let frame = 0
+    let startedAt = 0
+
+    const step = (now: number) => {
+      if (!startedAt) startedAt = now
+      const progress = clamp((now - startedAt) / RUN)
+      place(progress)
+      if (progress < 1) frame = window.requestAnimationFrame(step)
+      else frame = 0
+    }
+
+    place(0)
+    frame = window.requestAnimationFrame(step)
+
+    // A tab opened in the background is never given a frame, and the bar would
+    // sit invisible until somebody looked at it. This puts it home regardless.
+    const safety = window.setTimeout(() => {
+      if (frame) window.cancelAnimationFrame(frame)
+      frame = 0
+      place(1)
+    }, RUN + 900)
+
     return () => {
-      window.removeEventListener('scroll', assemble)
-      window.removeEventListener('resize', onResize)
+      if (frame) window.cancelAnimationFrame(frame)
+      window.clearTimeout(safety)
       clear()
     }
   }, [overHero])
@@ -228,9 +270,16 @@ export default function Header() {
             ))}
           </nav>
 
-          <div data-rise className="hidden md:flex items-center gap-5">
-            <LocaleSwitcher />
-            <ThemeToggle />
+          {/* Marked one by one, not on the box around them. Marked on the box
+              the pair counted as a single part and the two switches arrived
+              together while everything else came in one at a time. */}
+          <div className="hidden md:flex items-center gap-5">
+            <span data-rise className="inline-flex">
+              <LocaleSwitcher />
+            </span>
+            <span data-rise className="inline-flex">
+              <ThemeToggle />
+            </span>
           </div>
 
           <button

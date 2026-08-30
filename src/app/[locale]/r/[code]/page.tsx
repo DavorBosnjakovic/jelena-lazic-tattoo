@@ -7,6 +7,8 @@ import { Link } from '@/i18n/navigation'
 import { getServiceClient } from '@/lib/supabase-server'
 import { Referrer } from '@/lib/referral'
 import ReferralBookingForm from '@/components/referral/ReferralBookingForm'
+import RevealOnScroll from '@/components/ui/RevealOnScroll'
+import SplitLines from '@/components/ui/SplitLines'
 import MessengerIcon from '@/components/referral/MessengerIcon'
 
 export async function generateMetadata({
@@ -79,7 +81,12 @@ export default async function ReferralLandingPage({
             {t('badge', { name: referrer.name })}
           </p>
           <h1 className="text-4xl md:text-5xl font-heading mb-4">{renderWithPercent(t('title'))}</h1>
-          <p className="text-lg text-foreground/70">{t('subtitle')}</p>
+          <RevealOnScroll>
+            <SplitLines
+              text={t('subtitle')}
+              className="text-lg text-foreground/70"
+            />
+          </RevealOnScroll>
           <div className="w-24 h-1 bg-accent mx-auto mt-6" />
         </div>
 

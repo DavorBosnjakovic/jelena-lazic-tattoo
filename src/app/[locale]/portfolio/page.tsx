@@ -4,6 +4,8 @@ import type { Metadata } from 'next'
 import { getTranslations, setRequestLocale } from 'next-intl/server'
 import PortfolioGrid from '@/components/portfolio/PortfolioGrid'
 import TypedHeading from '@/components/ui/TypedHeading'
+import RevealOnScroll from '@/components/ui/RevealOnScroll'
+import SplitLines from '@/components/ui/SplitLines'
 
 export async function generateMetadata({
   params,
@@ -30,9 +32,13 @@ export default async function PortfolioPage({
           page is for. */}
       <div className="container mx-auto px-6 lg:px-8">
         <TypedHeading text={t('title')} />
-        <p className="text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto text-center -mt-10 mb-16">
-          {t('subtitle')}
-        </p>
+        {/* Line by line, the way every other subtitle on the site arrives. */}
+        <RevealOnScroll>
+          <SplitLines
+            text={t('subtitle')}
+            className="text-lg md:text-xl text-foreground/70 max-w-2xl mx-auto text-center -mt-10 mb-16"
+          />
+        </RevealOnScroll>
       </div>
 
       <div className="px-2">
