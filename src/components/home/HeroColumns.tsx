@@ -96,6 +96,14 @@ export default function HeroColumns() {
           mask="url(#hero-logo-hole)"
         />
       </svg>
+
+      {/* Says there is more below without saying it: the heading stroke stood
+          on end, drawn downwards over and over. Decoration to a reader that
+          cannot see it, so it is hidden from them - the page below is theirs
+          to reach by any of the usual means. */}
+      <div className="scroll-cue" aria-hidden="true">
+        <span />
+      </div>
     </section>
   )
 }
