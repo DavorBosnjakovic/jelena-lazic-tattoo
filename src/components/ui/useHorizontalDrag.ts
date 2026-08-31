@@ -5,9 +5,9 @@
 import { useCallback, useRef } from 'react'
 
 // Pointer events rather than separate mouse and touch handlers. One code path
-// covers a mouse, a finger and a pen, and pointer capture keeps the gesture
-// alive when the pointer wanders off the element it started on - over an
-// arrow, past the edge of the strip, out of the window.
+// covers a mouse, a finger and a pen, and once a drag is under way pointer
+// capture keeps it alive when the pointer wanders off the element it started
+// on - over an arrow, past the edge of the strip, out of the window.
 
 // A tap that wanders this far is still a tap. No finger is ever quite still,
 // and without the slack every tap on a photograph would register as a drag
@@ -50,7 +50,6 @@ export default function useHorizontalDrag({ onStart, onMove, onEnd }: Options) {
         moved: false,
       }
       dragged.current = false
-      event.currentTarget.setPointerCapture(event.pointerId)
       onStart?.()
     },
     [onStart]
@@ -65,6 +64,13 @@ export default function useHorizontalDrag({ onStart, onMove, onEnd }: Options) {
       if (!g.moved && Math.abs(dx) > SLOP) {
         g.moved = true
         dragged.current = true
+        // Captured here rather than at the start of the gesture. Capture
+        // retargets everything that follows to the element holding it - the
+        // click included - so capturing every press meant a plain click on a
+        // photograph was delivered to the strip around it and the picture
+        // never opened. A press that never becomes a drag is now never
+        // captured, and its click lands where it was aimed.
+        event.currentTarget.setPointerCapture(event.pointerId)
       }
 
       // Measured over the last move rather than the whole gesture, so a flick
