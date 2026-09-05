@@ -8,6 +8,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import MessengerIcon from '@/components/referral/MessengerIcon'
 import TypedHeading from '@/components/ui/TypedHeading'
 import RevealOnScroll from '@/components/ui/RevealOnScroll'
+import SocialIcon from '@/components/ui/SocialIcon'
+import { INKFORMER_URL, INKFORMER_RED } from '@/components/ui/InkformerLink'
 import SplitLines from '@/components/ui/SplitLines'
 
 export async function generateMetadata({
@@ -129,6 +131,21 @@ export default async function ReferPage({
                   />
                 </svg>
                 Email
+              </a>
+              <a
+                href={INKFORMER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="reveal-up deal-in btn btn-sm group"
+                style={{ '--i': messengers.length + 1 } as CSSProperties}
+              >
+                <SocialIcon
+                  icon="/social/inkformer.svg"
+                  name="Inkformer"
+                  color={INKFORMER_RED}
+                  className="w-[15px] h-[22px]"
+                />
+                Inkformer
               </a>
             </div>
           </div>

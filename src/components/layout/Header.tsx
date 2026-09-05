@@ -24,6 +24,7 @@ const socialLinks = [
   { name: 'Instagram', url: 'https://www.instagram.com/jelena_lazic_tattoo', icon: '/social/instagram.webp' },
   { name: 'Facebook', url: 'https://www.facebook.com/jelenalazictattoo', icon: '/social/facebook.webp' },
   { name: 'TikTok', url: 'https://www.tiktok.com/@jelenalazictattoo', icon: '/social/tiktok.webp' },
+  { name: 'Inkformer', url: 'https://inkformer.com/artist/jelenalazictattoo', icon: '/social/inkformer.svg', color: '#CC0000' },
   { name: 'WhatsApp', url: 'https://wa.me/381615849416', icon: '/social/whatsapp.webp' },
   { name: 'Telegram', url: 'https://t.me/+381615849416', icon: '/social/telegram.webp' },
 ]
@@ -390,6 +391,7 @@ export default function Header() {
                     <SocialIcon
                       icon={social.icon}
                       name={social.name}
+                      color={social.color}
                       className="w-full h-full"
                     />
                   </a>

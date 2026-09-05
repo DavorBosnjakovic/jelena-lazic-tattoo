@@ -5,6 +5,7 @@
 import { useRef } from 'react'
 import { useTranslations } from 'next-intl'
 import { Link } from '@/i18n/navigation'
+import InkformerLink from '@/components/ui/InkformerLink'
 
 export default function ContactCTA() {
   const t = useTranslations('contactCta')
@@ -39,6 +40,8 @@ export default function ContactCTA() {
               {t('viewPortfolio')}
             </Link>
           </div>
+
+          <InkformerLink />
 
           {/* Contact Info */}
           <div className="mt-14 pt-8 border-t border-foreground/15">

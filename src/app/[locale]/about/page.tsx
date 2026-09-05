@@ -6,6 +6,8 @@ import { getTranslations, setRequestLocale } from 'next-intl/server'
 import { Link } from '@/i18n/navigation'
 import TypedHeading from '@/components/ui/TypedHeading'
 import RevealOnScroll from '@/components/ui/RevealOnScroll'
+import SocialIcon from '@/components/ui/SocialIcon'
+import { INKFORMER_URL, INKFORMER_RED } from '@/components/ui/InkformerLink'
 import SplitLines from '@/components/ui/SplitLines'
 
 export async function generateMetadata({
@@ -26,6 +28,7 @@ export default async function AboutPage({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('about')
+  const tInk = await getTranslations('inkformer')
   const specialties = t.raw('specialties') as string[]
 
   return (
@@ -127,9 +130,20 @@ export default async function AboutPage({
               <Link href="/contact" className="btn">
                 {t('ctaGetInTouch')}
               </Link>
-              <Link href="/portfolio" className="btn btn-ghost">
-                {t('ctaViewPortfolio')}
-              </Link>
+              <a
+                href={INKFORMER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-ghost group"
+              >
+                <SocialIcon
+                  icon="/social/inkformer.svg"
+                  name="Inkformer"
+                  color={INKFORMER_RED}
+                  className="w-[13px] h-5"
+                />
+                {tInk('button')}
+              </a>
             </div>
           </div>
         </div>

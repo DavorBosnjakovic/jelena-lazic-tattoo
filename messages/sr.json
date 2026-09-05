@@ -229,5 +229,11 @@
     "creditExpired": "Istekao",
     "invalidTitle": "Stranica nije pronađena",
     "invalidText": "Ovaj link ne važi. Koristi lični link iz svog emaila."
+  },
+  "inkformer": {
+    "link": "Moj profil na Inkformeru",
+    "text": "Naći ćete me i na Inkformeru, platformi za tatu umetnike i njihove klijente - moji radovi, utisci klijenata i zakazivanje, sve na jednom mestu.",
+    "cta": "Pogledajte moj Inkformer profil",
+    "button": "Inkformer profil"
   }
 }

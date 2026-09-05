@@ -229,5 +229,11 @@
     "creditExpired": "Expired",
     "invalidTitle": "Page Not Found",
     "invalidText": "This link isn't valid. Use the personal link from your email."
+  },
+  "inkformer": {
+    "link": "My profile on Inkformer",
+    "text": "You will also find me on Inkformer, the platform for tattoo artists and their clients - my work, client reviews and booking, all in one place.",
+    "cta": "View my Inkformer profile",
+    "button": "Inkformer profile"
   }
 }

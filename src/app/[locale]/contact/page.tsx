@@ -8,6 +8,7 @@ import TypedHeading from '@/components/ui/TypedHeading'
 import RevealOnScroll from '@/components/ui/RevealOnScroll'
 import SplitLines from '@/components/ui/SplitLines'
 import SocialIcon from '@/components/ui/SocialIcon'
+import { INKFORMER_URL, INKFORMER_RED } from '@/components/ui/InkformerLink'
 // TEMPORARILY COMMENTED OUT - Google Map import - UNCOMMENT WHEN ADDRESS IS CONFIRMED
 // import GoogleMap from '@/components/contact/GoogleMap'
 
@@ -25,6 +26,7 @@ const socialLinks = [
   { name: 'Instagram', url: 'https://www.instagram.com/jelena_lazic_tattoo', icon: '/social/instagram.webp' },
   { name: 'Facebook', url: 'https://www.facebook.com/jelenalazictattoo', icon: '/social/facebook.webp' },
   { name: 'TikTok', url: 'https://www.tiktok.com/@jelenalazictattoo', icon: '/social/tiktok.webp' },
+  { name: 'Inkformer', url: INKFORMER_URL, icon: '/social/inkformer.svg', color: INKFORMER_RED },
   { name: 'WhatsApp', url: 'https://wa.me/381615849416', icon: '/social/whatsapp.webp' },
   { name: 'Telegram', url: 'https://t.me/+381615849416', icon: '/social/telegram.webp' },
 ]
@@ -37,6 +39,7 @@ export default async function ContactPage({
   const { locale } = await params
   setRequestLocale(locale)
   const t = await getTranslations('contact')
+  const tInk = await getTranslations('inkformer')
 
   const info = [
     {
@@ -51,6 +54,25 @@ export default async function ContactPage({
           </a>
           <p className="text-sm text-foreground/60 mt-2">{t('phoneNote')}</p>
         </>
+      ),
+    },
+    {
+      title: 'Inkformer',
+      body: (
+        <a
+          href={INKFORMER_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-2.5 text-foreground/90 font-body hover:text-accent transition-colors duration-200"
+        >
+          <SocialIcon
+            icon="/social/inkformer.svg"
+            name="Inkformer"
+            color={INKFORMER_RED}
+            className="w-[13px] h-5"
+          />
+          @jelenalazictattoo
+        </a>
       ),
     },
     {
@@ -114,7 +136,7 @@ export default async function ContactPage({
                         style={{ '--i': i } as CSSProperties}
                         aria-label={social.name}
                       >
-                        <SocialIcon icon={social.icon} name={social.name} className="w-full h-full" />
+                        <SocialIcon icon={social.icon} name={social.name} color={social.color} className="w-full h-full" />
                       </a>
                     ))}
                   </div>
@@ -148,6 +170,34 @@ export default async function ContactPage({
                   </div>
                 ))}
               </div>
+            </div>
+          </div>
+
+          {/* Her profile on Inkformer, the tattoo platform. It gets its own
+              block rather than another icon in the row, so it reads as a place
+              to go and keeps the platform's own red. */}
+          <div className="reveal-up step-reveal max-w-3xl mx-auto text-center border-t border-foreground/12 pt-12">
+            <div>
+              <a
+                href={INKFORMER_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block"
+                aria-label="Inkformer"
+              >
+                <SocialIcon
+                  icon="/social/inkformer-wordmark.svg"
+                  name="Inkformer"
+                  color={INKFORMER_RED}
+                  className="h-9 w-64"
+                />
+              </a>
+              <p className="text-foreground/70 font-body mt-6 mb-7 max-w-xl mx-auto">
+                {tInk('text')}
+              </p>
+              <a href={INKFORMER_URL} target="_blank" rel="noopener noreferrer" className="btn">
+                {tInk('cta')}
+              </a>
             </div>
           </div>
         </RevealOnScroll>
