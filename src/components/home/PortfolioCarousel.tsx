@@ -412,7 +412,7 @@ export default function PortfolioCarousel() {
   if (loading) {
     return (
       <section className="py-24 bg-background">
-        <div className="container mx-auto px-6 lg:px-8">
+        <div className="container mx-auto">
           <div className="text-center">
             <div className="animate-pulse">{t('loading')}</div>
           </div>
@@ -424,7 +424,7 @@ export default function PortfolioCarousel() {
   if (portfolioImages.length === 0) {
     return (
       <section className="py-24 bg-background">
-        <div className="container mx-auto px-6 lg:px-8">
+        <div className="container mx-auto">
           <div className="text-center">{t('noImages')}</div>
         </div>
       </section>
@@ -445,7 +445,7 @@ export default function PortfolioCarousel() {
 
   return (
     <section data-pin className="section-pin portfolio-section py-10">
-      <div className="text-center mb-8 px-6">
+      <div className="portfolio-head text-center px-6">
         <h2
           ref={headingRef}
           className="portfolio-reveal text-4xl md:text-5xl font-heading mb-4"
@@ -467,8 +467,10 @@ export default function PortfolioCarousel() {
         </p>
       </div>
 
+      {/* Same container as the copy above it, so the strip starts and ends
+          where the text does instead of running the full window. */}
       <div
-        className="relative"
+        className="relative container mx-auto"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -496,7 +498,7 @@ export default function PortfolioCarousel() {
             drag but took the pinch with it, which is why nothing here could
             be zoomed. */}
         <div
-          className="carousel-clip cursor-grab active:cursor-grabbing [touch-action:pan-y_pinch-zoom]"
+          className="carousel-clip carousel-fade cursor-grab active:cursor-grabbing [touch-action:pan-y_pinch-zoom]"
           ref={carouselRef}
           {...dragHandlers}
         >
@@ -550,7 +552,7 @@ export default function PortfolioCarousel() {
 
       </div>
 
-      <div className="text-center mt-6">
+      <div className="portfolio-cta text-center">
         <Link
           href="/portfolio"
           className="btn inline-block"

@@ -8,7 +8,7 @@ export default function NotFound() {
 
   return (
     <div className="min-h-screen flex items-center justify-center py-24">
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className="max-w-2xl mx-auto text-center">
           {/* 404 Illustration */}
           <div className="mb-8">
@@ -58,7 +58,7 @@ export default function NotFound() {
               </Link>
               <Link
                 href="/portfolio"
-                className="px-8 py-3 bg-foreground text-background font-nav font-semibold rounded-md hover:bg-foreground/90 hover:scale-102 transition-all duration-200"
+                className="px-8 py-3 bg-foreground text-background font-nav font-semibold hover:bg-foreground/90 hover:scale-102 transition-all duration-200"
               >
                 {t('viewPortfolio')}
               </Link>

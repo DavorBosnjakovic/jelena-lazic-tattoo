@@ -56,7 +56,7 @@ export default async function ReferralStatusPage({
   if (!data) {
     return (
       <div className="min-h-screen py-24">
-        <div className="container mx-auto px-6 lg:px-8 max-w-2xl text-center">
+        <div className="container mx-auto max-w-2xl text-center">
           <h1 className="text-4xl font-heading mb-4">{t('invalidTitle')}</h1>
           <p className="text-lg text-foreground/70">{t('invalidText')}</p>
         </div>
@@ -90,7 +90,7 @@ export default async function ReferralStatusPage({
 
   return (
     <div className="min-h-screen py-24">
-      <div className="container mx-auto px-6 lg:px-8 max-w-2xl">
+      <div className="container mx-auto max-w-2xl">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-5xl font-heading mb-2">{t('title')}</h1>
           <p className="text-lg text-foreground/70">{t('greeting', { name: referrer.name })}</p>
@@ -98,7 +98,7 @@ export default async function ReferralStatusPage({
         </div>
 
         {/* Balance */}
-        <div className="p-8 bg-foreground/5 rounded-lg border border-border text-center mb-6">
+        <div className="p-8 bg-foreground/5 border border-border text-center mb-6">
           <p className="text-foreground/70 font-body mb-2">{t('balanceLabel')}</p>
           <p className="text-5xl font-bold text-accent mb-2">{formatEur(balance)}</p>
           {nextExpiry && (
@@ -110,18 +110,18 @@ export default async function ReferralStatusPage({
 
         {/* Stats */}
         <div className="grid grid-cols-2 gap-4 mb-10">
-          <div className="p-5 bg-foreground/5 rounded-lg border border-border text-center">
+          <div className="p-5 bg-foreground/5 border border-border text-center">
             <p className="text-3xl font-bold">{completed.length}</p>
             <p className="text-sm text-foreground/70">{t('statReferrals')}</p>
           </div>
-          <div className="p-5 bg-foreground/5 rounded-lg border border-border text-center">
+          <div className="p-5 bg-foreground/5 border border-border text-center">
             <p className="text-3xl font-bold">{formatEur(totalEarned)}</p>
             <p className="text-sm text-foreground/70">{t('statEarned')}</p>
           </div>
         </div>
 
         {/* QR + share */}
-        <div className="p-6 md:p-8 bg-foreground/5 rounded-lg border border-border text-center mb-10">
+        <div className="p-6 md:p-8 bg-foreground/5 border border-border text-center mb-10">
           <h2 className="text-2xl font-heading mb-1">{t('shareTitle')}</h2>
           <p className="text-foreground/70 font-body mb-6">{t('shareText')}</p>
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -130,7 +130,7 @@ export default async function ReferralStatusPage({
             alt={`QR ${referrer.code}`}
             width={220}
             height={220}
-            className="mx-auto rounded-lg bg-white p-2 mb-4"
+            className="mx-auto bg-white p-2 mb-4"
           />
           <p className="text-2xl font-bold tracking-widest text-accent mb-4">{referrer.code}</p>
           <ShareLink url={referralLandingUrl(referrer.code)} />
@@ -150,7 +150,7 @@ export default async function ReferralStatusPage({
             {completed.map((r) => (
               <div
                 key={r.id}
-                className="flex items-center justify-between p-4 bg-foreground/5 rounded-lg border border-border"
+                className="flex items-center justify-between p-4 bg-foreground/5 border border-border"
               >
                 <div>
                   <p className="font-body font-semibold">{r.friend_name}</p>

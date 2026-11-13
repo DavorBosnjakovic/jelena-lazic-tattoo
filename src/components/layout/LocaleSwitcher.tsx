@@ -5,7 +5,7 @@ import { usePathname, useRouter } from '@/i18n/navigation'
 
 function FlagEN() {
   return (
-    <svg viewBox="0 0 24 16" className="w-5 h-[13px] rounded-[2px] block" aria-hidden="true">
+    <svg viewBox="0 0 24 16" className="w-5 h-[13px] block" aria-hidden="true">
       <rect width="24" height="16" fill="#012169" />
       <path d="M0,0 24,16 M24,0 0,16" stroke="#fff" strokeWidth="3.2" />
       <path d="M0,0 24,16 M24,0 0,16" stroke="#C8102E" strokeWidth="1.9" />
@@ -17,7 +17,7 @@ function FlagEN() {
 
 function FlagSR() {
   return (
-    <svg viewBox="0 0 24 16" className="w-5 h-[13px] rounded-[2px] block" aria-hidden="true">
+    <svg viewBox="0 0 24 16" className="w-5 h-[13px] block" aria-hidden="true">
       <rect width="24" height="16" fill="#fff" />
       <rect width="24" height="5.333" y="0" fill="#C6363C" />
       <rect width="24" height="5.333" y="5.333" fill="#0C4076" />

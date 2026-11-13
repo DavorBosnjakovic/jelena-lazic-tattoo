@@ -31,6 +31,10 @@
     "logoAlt": "Jelena Lazić Tattoo",
     "workAlt": "Tatu rad {number}"
   },
+  "statement": {
+    "label": "O radu",
+    "text": "Svaka tetovaža počinje razgovorom. Crtam za tvoju kožu i ni za čiju drugu, pa linija koju nosiš nije ničija osim tvoja. Neke ideje dođu gotove, a nekima treba par susreta da nađu svoj oblik. U svakom slučaju, ništa ne ide na kožu dok ne sjedne oboma."
+  },
   "carousel": {
     "title": "Portfolio",
     "subtitle": "Pogledajte izbor autorskih tatu dizajna koji spajaju umetničku izvrsnost i tehničko majstorstvo",

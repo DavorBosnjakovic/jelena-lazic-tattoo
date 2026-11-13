@@ -59,7 +59,7 @@ export default async function ReferralLandingPage({
   if (!referrer) {
     return (
       <div className="min-h-screen py-24">
-        <div className="container mx-auto px-6 lg:px-8 max-w-2xl text-center">
+        <div className="container mx-auto max-w-2xl text-center">
           <h1 className="text-4xl md:text-5xl font-heading mb-4">{t('invalidTitle')}</h1>
           <p className="text-lg text-foreground/70 mb-8">{t('invalidText')}</p>
           <Link
@@ -75,7 +75,7 @@ export default async function ReferralLandingPage({
 
   return (
     <div className="min-h-screen py-24">
-      <div className="container mx-auto px-6 lg:px-8 max-w-2xl">
+      <div className="container mx-auto max-w-2xl">
         <div className="text-center mb-12">
           <p className="text-sm font-nav uppercase tracking-widest text-accent mb-3">
             {t('badge', { name: referrer.name })}
@@ -90,7 +90,7 @@ export default async function ReferralLandingPage({
           <div className="w-24 h-1 bg-accent mx-auto mt-6" />
         </div>
 
-        <div className="p-6 md:p-8 bg-foreground/5 rounded-lg border border-border mb-10">
+        <div className="p-6 md:p-8 bg-foreground/5 border border-border mb-10">
           <p className="text-center text-foreground/80 font-body mb-2">{t('codeLabel')}</p>
           <p className="text-center text-3xl font-bold tracking-widest text-accent mb-0">{referrer.code}</p>
         </div>

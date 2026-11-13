@@ -71,7 +71,7 @@ export default function ContactForm() {
           id="fullName"
           type="text"
           {...register('fullName', { required: t('nameRequired') })}
-          className={`form-field w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
+          className={`form-field w-full px-4 py-3 border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.fullName ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('namePlaceholder')}
@@ -96,7 +96,7 @@ export default function ContactForm() {
               message: t('emailInvalid'),
             },
           })}
-          className={`form-field w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
+          className={`form-field w-full px-4 py-3 border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.email ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('emailPlaceholder')}
@@ -115,7 +115,7 @@ export default function ContactForm() {
           id="phone"
           type="tel"
           {...register('phone')}
-          className="form-field w-full px-4 py-3 rounded-md border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
+          className="form-field w-full px-4 py-3 border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
           placeholder={t('phonePlaceholder')}
         />
       </div>
@@ -135,7 +135,7 @@ export default function ContactForm() {
               message: t('messageMin'),
             },
           })}
-          className={`form-field w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none ${
+          className={`form-field w-full px-4 py-3 border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none ${
             errors.message ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('messagePlaceholder')}
@@ -158,7 +158,7 @@ export default function ContactForm() {
       {/* Status Message */}
       {message && (
         <div
-          className={`p-4 rounded-md ${
+          className={`p-4 ${
             status === 'success'
               ? 'bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200'
               : 'bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200'

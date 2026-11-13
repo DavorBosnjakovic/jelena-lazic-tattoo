@@ -19,7 +19,7 @@ export default function ContactCTA() {
       data-pin
       className="section-pin cta-section pt-10 pb-20 bg-background text-foreground"
     >
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className="max-w-3xl mx-auto text-center">
           {/* Heading */}
           <h2 className="text-4xl md:text-5xl font-heading mb-6">

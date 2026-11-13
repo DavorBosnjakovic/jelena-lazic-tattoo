@@ -31,6 +31,10 @@
     "logoAlt": "Jelena Lazić Tattoo",
     "workAlt": "Tattoo work {number}"
   },
+  "statement": {
+    "label": "About the work",
+    "text": "Every tattoo starts as a conversation. I draw for your skin alone, so the line you carry is a line nobody else wears. Some ideas arrive finished and some take a few sittings to find their shape. Either way, nothing goes on the skin until it feels right to both of us."
+  },
   "carousel": {
     "title": "Portfolio",
     "subtitle": "Explore a selection of custom tattoo designs combining artistic excellence with technical mastery",

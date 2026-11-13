@@ -99,7 +99,7 @@ export default async function ContactPage({
 
   return (
     <div className="deal-page min-h-screen pt-24 pb-20">
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto">
         <TypedHeading text={t('title')} />
 
         <RevealOnScroll>

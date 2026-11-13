@@ -187,7 +187,7 @@ export default function PortfolioGrid() {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto py-12">
         <div className="text-center">
           <div className="animate-pulse text-lg">{t('loading')}</div>
         </div>
@@ -197,7 +197,7 @@ export default function PortfolioGrid() {
 
   if (portfolioImages.length === 0) {
     return (
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto py-12">
         <div className="text-center">{t('noImages')}</div>
       </div>
     )

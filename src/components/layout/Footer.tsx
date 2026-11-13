@@ -27,7 +27,7 @@ export default function Footer() {
 
   return (
     <footer className="bg-background text-foreground border-t border-border pt-14 pb-8">
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
           <div>
             <h3 className="text-lg font-bold mb-4">{t('quickLinks')}</h3>

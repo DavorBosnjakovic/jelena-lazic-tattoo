@@ -78,7 +78,9 @@
      Set in the heading serif, a display face, so it takes a little more size
      and letter spacing than a button normally would. */
   .btn {
-    --btn-radius: 8px;
+    /* Square, to match the photographs. Kept as a variable because the
+       pressed and focus states below round off against it. */
+    --btn-radius: 0px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -445,6 +447,76 @@
   }
 }
 
+/* ---- Statement -----------------------------------------------------------
+   The line of copy that sits between the hero and the portfolio. The letters
+   start nearly invisible and light up as the paragraph climbs the screen,
+   with the brand red at the front of the light cooling back to the text
+   colour behind it. The position of the light is set by StatementText.tsx,
+   which writes --heat on each letter; everything else is here. */
+/* Only the vertical rhythm here; the gutters come from the shared container
+   inside, the same one the header uses. */
+.statement-section {
+  padding: 16vh 0 14vh;
+}
+
+@media (min-width: 768px) {
+  .statement-section {
+    padding: 22vh 0 18vh;
+  }
+}
+
+.statement-text {
+  margin: 0;
+  /* Wider and a size down from a single-line statement: the copy runs to
+     four sentences, and at display size it would fill the screen twice over. */
+  max-width: 38ch;
+  font-family: var(--font-heading), system-ui, sans-serif;
+  font-weight: 300;
+  /* Deliberately capped below the section headings further down the page,
+     which run to 3rem. This line is the loudest body copy on the site, but
+     it is still body copy, and a heading it outgrew would stop reading as
+     a heading. */
+  font-size: clamp(1.4rem, 2.7vw, 2.5rem);
+  line-height: 1.32;
+  letter-spacing: -0.02em;
+}
+
+/* Keeps a word in one piece, so the line only ever breaks at a space. */
+.statement-word {
+  white-space: nowrap;
+}
+
+.statement-letter {
+  /* Low enough to read as unlit, high enough that the sentence is still
+     legible before it is reached. */
+  color: rgb(var(--color-foreground) / 0.16);
+  transition: color 0.15s ease;
+}
+
+/* Lit letters sit at the ordinary text colour, pulled towards the brand red
+   by however much heat the leading edge has left on them. */
+.statement-letter.is-lit {
+  color: color-mix(
+    in srgb,
+    rgb(var(--color-accent)) var(--heat, 0%),
+    rgb(var(--color-foreground))
+  );
+}
+
+/* No scroll position to read from before the script runs, and on a browser
+   without color-mix the line would otherwise sit at 16% forever. */
+@supports not (color: color-mix(in srgb, red 50%, blue)) {
+  .statement-letter {
+    color: rgb(var(--color-foreground));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .statement-letter {
+    transition: none;
+  }
+}
+
 /* ---- Portfolio carousel --------------------------------------------------
    The track has to contain the slides waiting to the left and right, but must
    NOT clip vertically, or the cards arriving from above and below get cut in
@@ -462,6 +534,30 @@
   }
 }
 
+/* The two ends of the strip dissolve into the page instead of stopping at a
+   hard edge. Done with a mask rather than two gradient panels laid on top:
+   the mask needs no colour, so it is right in both themes without being told
+   which one is on, and nothing ends up sitting over a strip people drag.
+   The gradient runs sideways only, so the cards that arrive from above and
+   below are faded the same way and never clipped. */
+.carousel-fade {
+  --fade: clamp(1.5rem, 6vw, 6rem);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--fade),
+    #000 calc(100% - var(--fade)),
+    transparent 100%
+  );
+}
+
 /* Holds under the header while the next panel scrolls up over it. The header
    is a fixed 80px, so this needs no measuring and is in force from the first
    paint. `is-unpinned` takes it back off when a section turns out too tall
@@ -477,6 +573,19 @@
 .section-pin.is-unpinned {
   position: relative;
   top: auto;
+}
+
+/* The gaps around the carousel, held in vh rather than fixed rem. This
+   section pins under the header, and ScrollSequence takes the pin back off
+   the moment the section outgrows the space below it. Fixed gaps generous
+   enough to look right on a tall display would do exactly that on a laptop,
+   so these open up with the screen and tighten when there is no room. */
+.portfolio-head {
+  margin-bottom: clamp(2.25rem, 6vh, 4.5rem);
+}
+
+.portfolio-cta {
+  margin-top: clamp(1.75rem, 5.5vh, 4rem);
 }
 
 .portfolio-section {
@@ -1148,8 +1257,11 @@ h2.portfolio-reveal {
   animation: scaleIn 0.3s ease-out;
 }
 
+/* One width for the whole site, and it is the portfolio grid's: edge to edge
+   with the same small gutter the pictures get. Every section goes through
+   this class, so the frame is set here and nowhere else. */
 .container {
-  @apply mx-auto max-w-[1200px] px-6 lg:px-8;
+  @apply mx-auto max-w-none px-2;
 }
 
 *:focus-visible {
@@ -1392,7 +1504,6 @@ h2.portfolio-reveal {
   display: block;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
   border: 1px solid rgb(var(--color-border));
   background-color: rgb(var(--color-foreground) / 0.07);
   box-shadow:
@@ -1412,7 +1523,6 @@ h2.portfolio-reveal {
   display: flex;
   align-items: center;
   justify-content: space-around;
-  border-radius: 3px;
   border: 1px solid rgb(var(--color-foreground) / 0.16);
   background: linear-gradient(
     to bottom,
@@ -1428,7 +1538,6 @@ h2.portfolio-reveal {
 .texture {
   width: 2px;
   height: 58%;
-  border-radius: 1px;
   background-color: rgb(var(--color-foreground) / 0.22);
   box-shadow:
     -0.7px -1.5px 1px 0 rgb(255 255 255 / 0.18),

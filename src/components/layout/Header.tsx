@@ -228,7 +228,7 @@ export default function Header() {
         scrolled ? 'backdrop-blur-md' : ''
       } ${overHero ? '' : scrolled ? 'bg-background/80 shadow-sm' : 'bg-background'}`}
     >
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className="flex h-20 items-center justify-between">
           <Link
             data-rise
@@ -308,7 +308,7 @@ export default function Header() {
         className={`mobile-menu md:hidden ${mobileMenuOpen ? 'is-open' : ''}`}
       >
         <div ref={panelContentsRef}>
-          <div className="container mx-auto px-6 pt-4 pb-8">
+          <div className="container mx-auto pt-4 pb-8">
             <nav className="font-nav">
               {navItems.map((item, index) => (
                 <div

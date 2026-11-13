@@ -52,7 +52,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
 
   if (status === 'success') {
     return (
-      <div className="p-6 rounded-md bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200">
+      <div className="p-6 bg-green-50 dark:bg-green-900/20 text-green-800 dark:text-green-200">
         <p className="font-body">{message}</p>
       </div>
     )
@@ -68,7 +68,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
           id="fullName"
           type="text"
           {...register('fullName', { required: t('nameRequired') })}
-          className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
+          className={`w-full px-4 py-3 border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.fullName ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('namePlaceholder')}
@@ -92,7 +92,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
               message: t('emailInvalid'),
             },
           })}
-          className={`w-full px-4 py-3 rounded-md border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
+          className={`w-full px-4 py-3 border-2 bg-background text-foreground font-body focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 ${
             errors.email ? 'border-red-500' : 'border-border focus:border-accent'
           }`}
           placeholder={t('emailPlaceholder')}
@@ -110,7 +110,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
           id="phone"
           type="tel"
           {...register('phone')}
-          className="w-full px-4 py-3 rounded-md border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
+          className="w-full px-4 py-3 border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200"
           placeholder={t('phonePlaceholder')}
         />
       </div>
@@ -123,7 +123,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
           id="message"
           rows={5}
           {...register('message')}
-          className="w-full px-4 py-3 rounded-md border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none"
+          className="w-full px-4 py-3 border-2 border-border bg-background text-foreground font-body focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20 transition-all duration-200 resize-none"
           placeholder={t('messagePlaceholder')}
         />
       </div>
@@ -137,7 +137,7 @@ export default function ReferralBookingForm({ code }: { code: string }) {
       </button>
 
       {status === 'error' && message && (
-        <div className="p-4 rounded-md bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200">
+        <div className="p-4 bg-red-50 dark:bg-red-900/20 text-red-800 dark:text-red-200">
           <p className="text-sm font-body">{message}</p>
         </div>
       )}

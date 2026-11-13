@@ -55,7 +55,7 @@ export default function Modal({
       onClick={onClose}
     >
       <div
-        className={`relative bg-background rounded-xl shadow-2xl p-6 md:p-8 ${maxWidthStyles[maxWidth]} w-full animate-scaleIn`}
+        className={`relative bg-background shadow-2xl p-6 md:p-8 ${maxWidthStyles[maxWidth]} w-full animate-scaleIn`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}

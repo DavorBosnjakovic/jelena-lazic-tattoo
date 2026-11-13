@@ -3,6 +3,7 @@
 import { setRequestLocale } from 'next-intl/server'
 import HeroColumns from '@/components/home/HeroColumns'
 import HeroIntro from '@/components/home/HeroIntro'
+import StatementText from '@/components/home/StatementText'
 import ScrollSequence from '@/components/home/ScrollSequence'
 import PortfolioCarousel from '@/components/home/PortfolioCarousel'
 import ContactCTA from '@/components/home/ContactCTA'
@@ -20,6 +21,7 @@ export default async function HomePage({
       <ScrollSequence />
       <HeroIntro />
       <HeroColumns />
+      <StatementText />
       <PortfolioCarousel />
       <ContactCTA />
       {/* Room for the closing panel to hold against; the footer fills it. */}

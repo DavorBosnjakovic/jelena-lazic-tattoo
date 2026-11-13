@@ -33,7 +33,7 @@ export default async function AboutPage({
 
   return (
     <div className="min-h-screen py-24">
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto">
         <TypedHeading text={t('title')} />
 
         <div className="max-w-5xl mx-auto">

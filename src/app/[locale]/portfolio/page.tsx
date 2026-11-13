@@ -30,7 +30,7 @@ export default async function PortfolioPage({
     <div className="min-h-screen pt-24 pb-20">
       {/* Heading in a column, the pictures edge to edge - the work is what the
           page is for. */}
-      <div className="container mx-auto px-6 lg:px-8">
+      <div className="container mx-auto">
         <TypedHeading text={t('title')} />
         {/* Line by line, the way every other subtitle on the site arrives. */}
         <RevealOnScroll>

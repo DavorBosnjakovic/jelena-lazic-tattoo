@@ -48,7 +48,7 @@ export default async function ReferPage({
     <div className="deal-page min-h-screen pt-24 pb-20">
       {/* The prose keeps a column - a line of text running the full width of a
           desktop screen is unreadable. Everything else on the page is free. */}
-      <div className="container mx-auto px-6 lg:px-8 max-w-3xl">
+      <div className="container mx-auto max-w-3xl">
         <TypedHeading text={t('title')} />
 
         <RevealOnScroll>
