@@ -1257,11 +1257,11 @@ h2.portfolio-reveal {
   animation: scaleIn 0.3s ease-out;
 }
 
-/* One width for the whole site, and it is the portfolio grid's: edge to edge
-   with the same small gutter the pictures get. Every section goes through
-   this class, so the frame is set here and nowhere else. */
+/* One width for the whole site, header included. Every section goes through
+   this class, so the frame is set here and nowhere else - the call sites carry
+   no padding of their own. */
 .container {
-  @apply mx-auto max-w-none px-2;
+  @apply mx-auto max-w-[1200px] px-6 lg:px-8;
 }
 
 *:focus-visible {
